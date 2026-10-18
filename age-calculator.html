@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Age Calculator 🎂 — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0d1117;--purple:#7C3AED;--orange:#FF6B35;--blue:#2196F3;--green:#22C55E;--teal:#0EA5E9;--red:#EF4444}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+
+/* Header */
+.kk-header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:60px;
+  background:rgba(13,17,23,0.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.kk-logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:42px;height:42px;border-radius:14px;
+  background:linear-gradient(135deg,#FF6B35,#7C3AED,#2196F3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;box-shadow:0 4px 14px rgba(255,107,53,0.4);
+}
+.logo-text .lt{font-size:1rem;font-weight:800;color:#fff;line-height:1}
+.logo-text .lb{font-size:0.6rem;color:#FF6B35;font-weight:700;line-height:1;margin-top:2px}
+.hdr-stats{display:flex;gap:10px}
+.hdr-stat{font-size:0.8rem;font-weight:700;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
+
+/* Bottom Nav */
+.kk-bnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  display:flex;background:rgba(10,14,22,0.97);backdrop-filter:blur(16px);
+  border-top:1px solid rgba(255,255,255,0.08);height:64px;
+}
+.kk-bnav a{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.4);gap:3px;transition:color 0.2s;
+}
+.kk-bnav a.active,.kk-bnav a:hover{color:#FF6B35}
+.nb-icon{font-size:1.3rem;line-height:1}
+
+/* Page wrap */
+.page-wrap{padding:16px 16px 90px;max-width:520px;margin:0 auto}
+
+/* DOB Selector Card */
+.dob-card{
+  background:rgba(255,255,255,0.05);border-radius:24px;
+  padding:20px;border:1px solid rgba(255,255,255,0.08);
+  margin-bottom:16px;
+}
+.dob-title{font-size:1rem;font-weight:800;margin-bottom:14px;color:#fff}
+.dob-selects{display:flex;gap:10px}
+.dob-selects select{
+  flex:1;padding:12px 10px;border-radius:16px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#fff;font-size:0.92rem;font-weight:600;
+  font-family:'Poppins',sans-serif;
+  -webkit-appearance:none;appearance:none;
+  cursor:pointer;text-align:center;
+}
+.dob-selects select:focus{outline:none;border-color:#FF6B35}
+.dob-selects select option{background:#1a1f2e;color:#fff}
+
+/* Top Age Card */
+.age-top-card{
+  border-radius:28px;padding:24px 20px;
+  background:linear-gradient(135deg,#7C3AED 0%,#2196F3 50%,#FF6B35 100%);
+  box-shadow:0 12px 40px rgba(124,58,237,0.35);
+  margin-bottom:16px;text-align:center;position:relative;overflow:hidden;
+}
+.age-top-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 60%);
+  animation:shimmer 4s linear infinite;
+}
+@keyframes shimmer{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.age-main-text{font-size:1.1rem;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:6px;font-family:'Hind',sans-serif}
+.age-big{font-size:1.6rem;font-weight:900;color:#fff;line-height:1.3;font-family:'Hind',sans-serif;margin-bottom:8px}
+.age-seconds{font-size:0.85rem;color:rgba(255,255,255,0.75);margin-top:4px}
+.age-sec-num{font-size:1.2rem;font-weight:900;color:#FFD93D}
+.age-emoji{font-size:3rem;margin-bottom:8px;display:block;position:relative;z-index:1}
+
+/* Stat Cards Grid */
+.stats-section-title{font-size:0.72rem;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{
+  border-radius:20px;padding:16px 14px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.stat-card-icon{font-size:1.6rem;margin-bottom:6px;display:block}
+.stat-card-val{font-size:1.25rem;font-weight:900;line-height:1;word-break:break-all}
+.stat-card-lbl{font-size:0.72rem;font-weight:700;margin-top:4px;opacity:0.85;font-family:'Hind',sans-serif}
+
+/* Birthday Countdown */
+.bday-card{
+  background:linear-gradient(135deg,#1a1f2e,#0d1117);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:24px;padding:20px;margin-bottom:16px;
+  text-align:center;
+}
+.bday-title{font-size:1rem;font-weight:800;margin-bottom:4px}
+.bday-sub{font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:16px;font-family:'Hind',sans-serif}
+.bday-grid{display:flex;gap:10px;justify-content:center}
+.bday-box{
+  flex:1;max-width:80px;
+  background:rgba(255,255,255,0.08);border-radius:16px;padding:12px 6px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.bday-num{font-size:1.5rem;font-weight:900;color:#FFD93D;line-height:1}
+.bday-lbl{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.6);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+.bday-today{
+  background:linear-gradient(135deg,#22C55E,#16A34A);
+  border-radius:16px;padding:14px;font-size:1rem;font-weight:800;color:#fff;
+  display:none;margin-top:10px;
+}
+
+/* Bonus Card */
+.bonus-card{
+  background:linear-gradient(135deg,#1a2a1a,#0d1a0d);
+  border:1px solid rgba(34,197,94,0.3);
+  border-radius:24px;padding:20px;margin-bottom:16px;
+  text-align:center;
+}
+.bonus-title{font-size:1rem;font-weight:800;color:#22C55E;margin-bottom:4px}
+.bonus-sub{font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:14px}
+.bonus-btn{
+  padding:14px 28px;border-radius:16px;
+  background:linear-gradient(135deg,#22C55E,#16A34A);
+  color:#fff;font-weight:800;font-size:1rem;
+  box-shadow:0 6px 20px rgba(34,197,94,0.4);
+  transition:transform 0.15s;
+}
+.bonus-btn:active{transform:scale(0.96)}
+.bonus-btn:disabled{opacity:0.5;cursor:default;transform:none}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(0,0,0,0.9);color:#fff;padding:10px 22px;border-radius:50px;
+  font-size:0.85rem;font-weight:700;white-space:nowrap;
+  opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header class="kk-header">
+  <div class="kk-logo">
+    <div class="logo-icon">🎂</div>
+    <div class="logo-text">
+      <div class="lt">Age Calculator</div>
+      <div class="lb">जन्मदिन कैलकुलेटर</div>
+    </div>
+  </div>
+  <div class="hdr-stats">
+    <div class="hdr-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="hdr-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- DOB Selector -->
+  <div class="dob-card">
+    <div class="dob-title">📅 जन्म तिथि चुनें (Date of Birth)</div>
+    <div class="dob-selects">
+      <select id="sel-day" onchange="calcAge()"></select>
+      <select id="sel-month" onchange="calcAge()"></select>
+      <select id="sel-year" onchange="calcAge()"></select>
+    </div>
+  </div>
+
+  <!-- Main Age Display Card -->
+  <div class="age-top-card" id="age-top-card">
+    <span class="age-emoji">🎂</span>
+    <div class="age-main-text">आपकी आयु है / Your Age is:</div>
+    <div class="age-big" id="age-big-text">-- वर्ष, -- महीने, -- दिन</div>
+    <div class="age-seconds">
+      आप जी चुके हैं / You have lived:
+      <br><span class="age-sec-num" id="total-seconds-live">--</span> सेकंड
+    </div>
+  </div>
+
+  <!-- Life Breakdown Grid -->
+  <div class="stats-section-title">🔢 जीवन का विवरण (Life Breakdown)</div>
+  <div class="stats-grid">
+    <div class="stat-card" style="background:linear-gradient(135deg,#7f1d1d,#991b1b)">
+      <span class="stat-card-icon">📅</span>
+      <div class="stat-card-val" id="total-months">--</div>
+      <div class="stat-card-lbl">कुल महीने / Total Months</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#92400e,#b45309)">
+      <span class="stat-card-icon">📆</span>
+      <div class="stat-card-val" id="total-weeks">--</div>
+      <div class="stat-card-lbl">कुल सप्ताह / Total Weeks</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
+      <span class="stat-card-icon">☀️</span>
+      <div class="stat-card-val" id="total-days">--</div>
+      <div class="stat-card-lbl">कुल दिन / Total Days</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#134e4a,#0f766e)">
+      <span class="stat-card-icon">⏰</span>
+      <div class="stat-card-val" id="total-hours">--</div>
+      <div class="stat-card-lbl">कुल घंटे / Total Hours</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#3b0764,#6b21a8)">
+      <span class="stat-card-icon">⏳</span>
+      <div class="stat-card-val" id="total-minutes">--</div>
+      <div class="stat-card-lbl">कुल मिनट / Total Minutes</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#431407,#c2410c)">
+      <span class="stat-card-icon">⏱️</span>
+      <div class="stat-card-val" id="total-seconds">--</div>
+      <div class="stat-card-lbl">कुल सेकंड / Total Seconds</div>
+    </div>
+  </div>
+
+  <!-- Next Birthday Countdown -->
+  <div class="bday-card">
+    <div class="bday-title">🎉 अगला जन्मदिन / Next Birthday</div>
+    <div class="bday-sub" id="bday-date-text">आपका अगला जन्मदिन</div>
+    <div class="bday-grid">
+      <div class="bday-box">
+        <div class="bday-num" id="bd-days">--</div>
+        <div class="bday-lbl">दिन / Days</div>
+      </div>
+      <div class="bday-box">
+        <div class="bday-num" id="bd-hours">--</div>
+        <div class="bday-lbl">घंटे / Hours</div>
+      </div>
+      <div class="bday-box">
+        <div class="bday-num" id="bd-mins">--</div>
+        <div class="bday-lbl">मिनट / Mins</div>
+      </div>
+      <div class="bday-box">
+        <div class="bday-num" id="bd-secs">--</div>
+        <div class="bday-lbl">सेकंड / Secs</div>
+      </div>
+    </div>
+    <div class="bday-today" id="bday-today">🎂 Happy Birthday! आज आपका जन्मदिन है! 🎉🎊</div>
+  </div>
+
+  <!-- Bonus Card -->
+  <div class="bonus-card">
+    <div class="bonus-title">🎁 दैनिक बोनस / Daily Bonus</div>
+    <div class="bonus-sub">हर दिन बोनस लो — Get daily reward!</div>
+    <button class="bonus-btn" id="bonus-btn" onclick="claimBonus()">🎁 Claim Bonus (+💎 10 +⭐ 100)</button>
+  </div>
+
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const MONTHS_HI=['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+const MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const LS_KEY='kkb_rewards';
+const LS_DOB='kkb_dob';
+const LS_BONUS='kkb_bonus_date';
+
+function getRewards(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY))||{stars:0,diamonds:0,badges:[]}; }
+  catch(e){ return {stars:0,diamonds:0,badges:[]}; }
+}
+function saveRewards(r){ localStorage.setItem(LS_KEY,JSON.stringify(r)); }
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+function updateHeader(){
+  const r=getRewards();
+  document.getElementById('hdr-stars').textContent=r.stars||0;
+  document.getElementById('hdr-diamonds').textContent=r.diamonds||0;
+}
+
+// ── Populate Dropdowns ──
+function buildSelects(){
+  const dayEl=document.getElementById('sel-day');
+  const monEl=document.getElementById('sel-month');
+  const yrEl=document.getElementById('sel-year');
+
+  for(let d=1;d<=31;d++){
+    const o=document.createElement('option'); o.value=d; o.textContent=d;
+    dayEl.appendChild(o);
+  }
+  MONTHS_HI.forEach((m,i)=>{
+    const o=document.createElement('option'); o.value=i+1; o.textContent=m;
+    monEl.appendChild(o);
+  });
+  const curY=new Date().getFullYear();
+  for(let y=curY;y>=1900;y--){
+    const o=document.createElement('option'); o.value=y; o.textContent=y;
+    yrEl.appendChild(o);
+  }
+
+  // Restore saved DOB
+  try{
+    const saved=JSON.parse(localStorage.getItem(LS_DOB));
+    if(saved){
+      dayEl.value=saved.d;
+      monEl.value=saved.m;
+      yrEl.value=saved.y;
+    } else {
+      // Default: Jan 1, 2000
+      dayEl.value=1; monEl.value=1; yrEl.value=2000;
+    }
+  } catch(e){
+    dayEl.value=1; monEl.value=1; yrEl.value=2000;
+  }
+}
+
+// ── Main Calculation ──
+let liveInterval=null;
+let birthDay=1, birthMonth=1, birthYear=2000;
+
+function calcAge(){
+  birthDay=parseInt(document.getElementById('sel-day').value)||1;
+  birthMonth=parseInt(document.getElementById('sel-month').value)||1;
+  birthYear=parseInt(document.getElementById('sel-year').value)||2000;
+
+  // Save DOB
+  localStorage.setItem(LS_DOB,JSON.stringify({d:birthDay,m:birthMonth,y:birthYear}));
+
+  // Validate date
+  const testDate=new Date(birthYear,birthMonth-1,birthDay);
+  if(testDate>new Date()){ 
+    document.getElementById('age-big-text').textContent='⚠️ भविष्य की तारीख नहीं चुन सकते';
+    return;
+  }
+
+  updateAll();
+  if(liveInterval) clearInterval(liveInterval);
+  liveInterval=setInterval(updateAll,1000);
+}
+
+function updateAll(){
+  const now=new Date();
+  const birth=new Date(birthYear,birthMonth-1,birthDay);
+
+  // ── Exact Age in years/months/days ──
+  let yrs=now.getFullYear()-birth.getFullYear();
+  let mos=now.getMonth()-birth.getMonth();
+  let dys=now.getDate()-birth.getDate();
+
+  if(dys<0){
+    mos--;
+    const prevMonth=new Date(now.getFullYear(),now.getMonth(),0);
+    dys+=prevMonth.getDate();
+  }
+  if(mos<0){ yrs--; mos+=12; }
+
+  document.getElementById('age-big-text').textContent=
+    `${yrs} वर्ष, ${mos} महीने, ${dys} दिन`;
+
+  // ── Total stats ──
+  const totalMsec=now.getTime()-birth.getTime();
+  const totalSecs=Math.floor(totalMsec/1000);
+  const totalMins=Math.floor(totalSecs/60);
+  const totalHrs=Math.floor(totalMins/60);
+  const totalDaysAll=Math.floor(totalHrs/24);
+  const totalWeeks=Math.floor(totalDaysAll/7);
+  const totalMonths=yrs*12+mos;
+
+  document.getElementById('total-months').textContent=totalMonths.toLocaleString('en-IN');
+  document.getElementById('total-weeks').textContent=totalWeeks.toLocaleString('en-IN');
+  document.getElementById('total-days').textContent=totalDaysAll.toLocaleString('en-IN');
+  document.getElementById('total-hours').textContent=totalHrs.toLocaleString('en-IN');
+  document.getElementById('total-minutes').textContent=totalMins.toLocaleString('en-IN');
+  document.getElementById('total-seconds').textContent=totalSecs.toLocaleString('en-IN');
+  document.getElementById('total-seconds-live').textContent=totalSecs.toLocaleString('en-IN');
+
+  // ── Next Birthday Countdown ──
+  updateBirthdayCountdown(now);
+}
+
+function updateBirthdayCountdown(now){
+  let nextBday=new Date(now.getFullYear(),birthMonth-1,birthDay);
+  // If birthday already passed this year, use next year
+  if(nextBday.getTime()<=now.getTime()){
+    nextBday=new Date(now.getFullYear()+1,birthMonth-1,birthDay);
+  }
+
+  // Check if today IS the birthday
+  const todayIsBday=(now.getMonth()+1===birthMonth && now.getDate()===birthDay);
+  const todayDiv=document.getElementById('bday-today');
+  const bdGrid=document.querySelector('.bday-grid');
+
+  if(todayIsBday){
+    todayDiv.style.display='block';
+    bdGrid.style.display='none';
+    document.getElementById('bday-date-text').textContent='🎂 Happy Birthday! 🎉';
+    return;
+  }
+  todayDiv.style.display='none';
+  bdGrid.style.display='flex';
+
+  const diffMs=nextBday.getTime()-now.getTime();
+  const diffSecs=Math.floor(diffMs/1000);
+  const diffMins=Math.floor(diffSecs/60);
+  const diffHrs=Math.floor(diffMins/60);
+  const diffDays=Math.floor(diffHrs/24);
+
+  document.getElementById('bd-days').textContent=diffDays;
+  document.getElementById('bd-hours').textContent=diffHrs%24;
+  document.getElementById('bd-mins').textContent=diffMins%60;
+  document.getElementById('bd-secs').textContent=diffSecs%60;
+  document.getElementById('bday-date-text').textContent=
+    `${birthDay} ${MONTHS_EN[birthMonth-1]} ${nextBday.getFullYear()} को / on`;
+}
+
+// ── Bonus ──
+function claimBonus(){
+  const today=new Date().toDateString();
+  const lastClaim=localStorage.getItem(LS_BONUS);
+  if(lastClaim===today){
+    showToast('⏰ Bonus already claimed today! कल फिर आएं');
+    return;
+  }
+  const r=getRewards();
+  r.stars=(r.stars||0)+100;
+  r.diamonds=(r.diamonds||0)+10;
+  saveRewards(r);
+  localStorage.setItem(LS_BONUS,today);
+  updateHeader();
+  const btn=document.getElementById('bonus-btn');
+  btn.disabled=true;
+  btn.textContent='✅ Claimed Today!';
+  showToast('🎁 +💎 10 Diamonds +⭐ 100 Stars मिले!');
+}
+
+// Check if bonus already claimed today
+function checkBonus(){
+  const today=new Date().toDateString();
+  const lastClaim=localStorage.getItem(LS_BONUS);
+  const btn=document.getElementById('bonus-btn');
+  if(lastClaim===today){
+    btn.disabled=true;
+    btn.textContent='✅ Claimed Today!';
+  }
+}
+
+// ── Init ──
+buildSelects();
+calcAge();
+checkBonus();
+updateHeader();
+setInterval(updateHeader,3000);
+</script>
+</body>
+</html>

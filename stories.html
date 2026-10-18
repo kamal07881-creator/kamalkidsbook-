@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Stories — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-tab.active{color:#FF9800}
+.kk-logo-icon{background:linear-gradient(135deg,#FF9800,#f44336);box-shadow:0 4px 14px rgba(255,152,0,0.4)}
+.brand-bot{color:#FFB74D}
+.s-card{border-radius:24px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.35);transition:transform 0.18s}
+.s-card:hover{transform:translateY(-3px)}
+.s-card img{width:100%;height:200px;object-fit:cover;display:block}
+.s-card-body{padding:18px 20px 20px}
+.s-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8)}
+.s-title{font-size:1.35rem;font-weight:900;color:#fff;margin-bottom:10px;line-height:1.3}
+.s-divider{height:3px;border-radius:2px;margin-bottom:14px;width:48px}
+.s-text{font-size:1.05rem;line-height:2;color:rgba(255,255,255,0.85);margin-bottom:16px}
+.s-text .word{cursor:pointer;border-radius:4px;padding:1px 2px;transition:background 0.15s}
+.s-text .word:hover,.s-text .word.speaking{background:rgba(255,255,255,0.2)}
+.s-listen{width:100%;padding:13px;border:none;border-radius:18px;font-size:1rem;font-weight:800;cursor:pointer;color:#fff;font-family:'Baloo 2',sans-serif;transition:all 0.15s;box-shadow:0 4px 16px rgba(0,0,0,0.25)}
+.s-listen.speaking{animation:sPulse 0.8s ease infinite}
+.s-listen:active{transform:scale(0.97)}
+@keyframes sPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.stories-wrap{padding:16px;max-width:640px;margin:0 auto}
+/* Long stories */
+.long-story-section{margin-bottom:32px}
+.long-story-title{font-size:1.5rem;font-weight:900;color:#fff;padding:12px 20px;background:rgba(255,255,255,0.08);border-radius:18px;margin:0 16px 16px;text-align:center}
+.long-para-card{border-radius:20px;margin:0 16px 16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.3)}
+.long-para-card img{width:100%;height:220px;object-fit:cover;display:block}
+.long-para-body{padding:16px 18px}
+.long-para-num{font-size:0.85rem;font-weight:800;color:rgba(255,255,255,0.5);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.long-para-text{font-size:1.05rem;line-height:2;color:rgba(255,255,255,0.9)}
+.long-para-text .word{cursor:pointer;border-radius:4px;padding:1px 2px;transition:background 0.15s}
+.long-para-text .word:hover,.long-para-text .word.speaking{background:rgba(255,255,255,0.2)}
+.long-listen-btn{width:calc(100% - 32px);margin:0 16px 8px;display:block;padding:13px;border:none;border-radius:16px;font-size:1rem;font-weight:800;cursor:pointer;color:#fff;font-family:'Baloo 2',sans-serif;transition:all 0.15s;box-shadow:0 4px 16px rgba(0,0,0,0.25)}
+.long-listen-btn.speaking{animation:sPulse 0.8s ease infinite}
+</style>
+</head>
+<body>
+
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">📖</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Stories</div>
+      <div class="brand-bot">KIDS STORIES 🌙</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-d">0</span></div>
+  </div>
+</header>
+
+<div class="kk-tabs">
+  <button class="kk-tab active" onclick="switchTab('bed',this)" style="color:#FF9800">Bedtime 🌙</button>
+  <button class="kk-tab" onclick="switchTab('more',this)">More Stories 📖</button>
+  <button class="kk-tab" onclick="switchTab('long',this)">Long Stories 📚</button>
+</div>
+
+<div id="pane-bed" class="tab-pane active">
+  <div class="stories-wrap" id="bed-wrap"></div>
+</div>
+<div id="pane-more" class="tab-pane">
+  <div class="stories-wrap" id="more-wrap"></div>
+</div>
+<div id="pane-long" class="tab-pane">
+  <div id="long-wrap"></div>
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+// ─── BEDTIME STORIES ───
+const BED_STORIES = [
+  {title:'The Goodnight Bear',cat:'Bedtime',img:'images/bt_story_1.webp',ac:'#5C6BC0',bg:'linear-gradient(145deg,#1a1c40,#0f1028)',
+   text:'Once there was a big fluffy bear named Bruno who lived in a cozy cave in the forest. Every night before bed he would count the stars. One two three four five. He would count until his eyes grew heavy.\n\nOne night Bruno could not sleep. He tried counting stars. He tried drinking warm honey. Nothing worked.\n\nThen his mother said — Bruno close your eyes and think of the most beautiful meadow you know. Bruno closed his eyes. He thought of green grass and yellow flowers and a gentle stream.\n\nSlowly slowly the sounds of the forest — crickets singing wind in the trees water over pebbles — rocked him to sleep like a lullaby.\n\nAnd Bruno the bear slept soundly all night long. Goodnight Bruno. Goodnight little one.'},
+  {title:'The Sleepy Star',cat:'Bedtime',img:'images/bt_story_2.webp',ac:'#7B1FA2',bg:'linear-gradient(145deg,#1a0a28,#100618)',
+   text:'High up in the night sky there was a tiny star named Tara. Every night all the other stars would shine brightly but Tara could barely keep her eyes open.\n\nMoon asked — Tara why do you flicker so? Tara yawned and said — I am always so sleepy Moon Uncle.\n\nMoon smiled kindly. He said — little one it is because you work so hard making wishes come true for children all day. You deserve to rest.\n\nSo Moon placed a tiny cloud pillow beneath Tara. She closed her eyes. And when she slept she shone more beautifully than ever — a soft warm glow that lit the path for all the dreamers below.\n\nLook up at the softest star tonight. That is Tara sleeping and dreaming. Goodnight little star.'},
+  {title:'The Moon and the Child',cat:'Bedtime',img:'images/bt_story_3.webp',ac:'#1565C0',bg:'linear-gradient(145deg,#0a1428,#061020)',
+   text:'A little girl named Priya could not sleep. She climbed to her window and whispered — Moon will you play with me?\n\nThe moon smiled and said — I would love to little one. But look how late it is. All the flowers are sleeping. The birds are sleeping. The trees are sleeping.\n\nPriya looked out. The whole world was wrapped in soft darkness. A cool breeze touched her cheek like a goodnight kiss.\n\nMoon continued — I will stay right here watching over you all night. Every time you dream I will send you a little more moonlight to make your dream brighter.\n\nPriya climbed back into her warm bed. She knew the moon was watching. She felt safe and happy.\n\nShe was asleep before she could count to ten. The moon smiled and kept its promise. Goodnight Priya.'},
+  {title:'The Dreamcloud Express',cat:'Bedtime',img:'images/bt_story_4.webp',ac:'#00838F',bg:'linear-gradient(145deg,#0a1f20,#061415)',
+   text:'Every night at exactly eight o clock a magical train called the Dreamcloud Express would arrive. It ran on moonbeams and was pulled by white horses made of cloud.\n\nThe conductor was a kind old owl named Oliver. He wore a tiny cap and called out — All aboard for Dreamland!\n\nChildren from all over would climb on. There were soft seats made of velvet and windows that showed the most beautiful things — mountains made of candy oceans of sparkling stars forests where animals could talk.\n\nThe train rocked gently. The wheels made a soft sound — clickety clack clickety clack. One by one the children fell asleep in their seats.\n\nWhen they woke up it would be morning and they would be back in their own beds full of the most wonderful dreams.\n\nSo close your eyes. The Dreamcloud Express is coming for you. Clickety clack. Clickety clack.'},
+  {title:'The Rabbit Who Found Sleep',cat:'Bedtime',img:'images/bt_story_5.webp',ac:'#558B2F',bg:'linear-gradient(145deg,#0f1e0a,#0a1508)',
+   text:'Little Rosie the rabbit was wide awake long after all her brothers and sisters were asleep. She crept out of the burrow and sat under the old oak tree.\n\nA wise firefly floated up to her. What is the matter little rabbit? Rosie said — I cannot sleep. My mind is full of thoughts.\n\nThe firefly said — let us give each thought a name and then send it floating away on a leaf down the stream.\n\nSo Rosie named each thought. This one is I forgot to eat my carrot. This one is I wonder about tomorrow. This one is I miss my friend. And one by one she placed each thought on a leaf and watched it drift peacefully down the moonlit stream.\n\nWhen the last leaf floated away her mind was clear and calm like still water. She went back to the burrow and fell fast asleep.\n\nGoodnight little rabbit. Let your worries float away.'},
+  {title:'The Gentle Giant',cat:'Bedtime',img:'images/bt_story_6.webp',ac:'#4527A0',bg:'linear-gradient(145deg,#150a2d,#0d0618)',
+   text:'In a land far away there was a giant named Goliath — but he was the gentlest giant in the whole world. Every night he would tiptoe around the village to make sure everyone was safe.\n\nHe would whisper goodnight to each house. Goodnight baker. Goodnight farmer. Goodnight little ones.\n\nThe children of the village were never afraid because they knew gentle Goliath was watching. They would fall asleep feeling safe and warm.\n\nOne night a small boy asked — Goliath who watches over YOU when you sleep? The giant blinked and thought.\n\nThe stars do he said softly. Every star is a friend watching over everyone — big or small — through the night.\n\nThe boy smiled and looked up at the sky full of stars. Then he closed his eyes and slept peacefully.\n\nGoodnight gentle giant. Goodnight little one. The stars are watching.'},
+  {title:'Butterfly Dreams',cat:'Bedtime',img:'images/bt_story_7.webp',ac:'#E91E63',bg:'linear-gradient(145deg,#2d0a1a,#1a0610)',
+   text:'In a garden full of flowers there lived a tiny caterpillar named Coco. Every night Coco would look at the butterflies and wish she could fly.\n\nHer grandmother said — Coco you will fly one day. But first you must rest and grow. Sleep is where wings are made.\n\nSo every night Coco would find a leaf and sleep curled up tight. She would dream of flying over rainbows and touching clouds and drinking from the sweetest flowers.\n\nOne morning she woke up and her whole body felt different. She stretched and to her amazement beautiful wings unfolded — orange and gold and purple.\n\nShe flew up into the blue sky laughing with joy. And she remembered what grandmother said. Sleep is where wings are made.\n\nSo sleep well little one. Your wings are growing in your dreams.'},
+  {title:'The Moonflower Garden',cat:'Bedtime',img:'images/bt_story_8.webp',ac:'#1B5E20',bg:'linear-gradient(145deg,#0a1f0a,#061408)',
+   text:'There was a magical garden that only bloomed at night. It was called the Moonflower Garden and it was tended by a little girl named Luna.\n\nEvery evening as the sun went down the flowers would open their petals — white and silver and pale blue — and fill the air with the most beautiful perfume.\n\nLuna would walk among them and the flowers would sing a soft lullaby — mmm mmm mmm — like a gentle hum.\n\nVisitors who came to the garden always fell asleep among the flowers and had the most peaceful dreams.\n\nIf you smell something sweet tonight just before you fall asleep — that is the Moonflower perfume drifting through your window.\n\nBreath it in. Close your eyes. The moonflowers are singing just for you. Goodnight.'},
+  {title:'The Little Lighthouse Keeper',cat:'Bedtime',img:'images/bt_story_9.webp',ac:'#F57F17',bg:'linear-gradient(145deg,#1f1200,#150c00)',
+   text:'On a small rocky island lived a little lighthouse keeper named Finn. Every night he would climb the lighthouse stairs and light the great lamp to guide ships safely home.\n\nThe ships would see his light and the sailors would say — there is the lighthouse. We are safe now.\n\nOne stormy night Finn was very tired. He climbed the stairs slowly. His legs were heavy. But he kept going — one step at a time.\n\nWhen the lamp was lit he could see the distant ships turning safely away from the rocks. He had done his job.\n\nFinn curled up at the base of the lighthouse wrapped in his warm coat. The sound of waves was like a lullaby. The rotating light swept overhead like a warm hand.\n\nAnd brave little Finn slept the sleep of someone who had done something good. That is the sweetest sleep of all. Goodnight Finn.'},
+  {title:'The Night Garden Fairies',cat:'Bedtime',img:'images/bt_story_10.webp',ac:'#AD1457',bg:'linear-gradient(145deg,#200a18,#150610)',
+   text:'In every garden at night when all the people are asleep tiny fairies come out to work. They water the flowers and polish the dewdrops and make sure every blade of grass is standing straight.\n\nThey work by the light of the fireflies who are their friends.\n\nOne night a little fairy named Blossom was polishing a rose when she heard someone crying. She flew to the window and saw a little child who could not sleep.\n\nBlossom sprinkled three drops of night magic — one for calm one for peace one for sweet dreams.\n\nThe child yawned. The child stretched. The child closed their eyes.\n\nBlossom smiled and flew back to her rose. There is nothing better she thought than helping someone sleep.\n\nSo if you cannot sleep tonight — the fairies are listening. Just close your eyes and let them work their magic. Goodnight.'},
+  {title:'Stars and the Shepherd',cat:'Bedtime',img:'images/bt_story_11.webp',ac:'#283593',bg:'linear-gradient(145deg,#0a1028,#061020)',
+   text:'A young shepherd named Eli slept under the open sky every night watching over his flock. He knew every star by name.\n\nThat bright one is my friend he would say. That cluster is a family huddled together for warmth. That faint one is a child just learning to shine.\n\nThe stars heard him and they liked being named. So every night they shone a little brighter for Eli.\n\nElf fell asleep counting stars and the stars counted back — one shepherd two sheep three clouds four crickets.\n\nWhen morning came the whole sky glowed pink and orange to wake him gently. Good morning Eli said the sun.\n\nAnd Eli would rise refreshed and happy ready for a new day.\n\nLook at the stars tonight. Find one that is yours. Give it a name. It will shine for you all night. Goodnight.'},
+  {title:'The Singing River',cat:'Bedtime',img:'images/bt_story_12.webp',ac:'#00695C',bg:'linear-gradient(145deg,#0a1f1a,#061410)',
+   text:'There was a river that sang. Not loudly — just softly — a gentle murmur like someone humming a lullaby.\n\nVillages along the river bank always slept so well. Babies fell asleep easily. Old people had peaceful dreams. Even the dogs slept soundly without barking.\n\nA traveler asked the village elder — why does everyone here sleep so well? The elder smiled and said — listen.\n\nThe traveler listened. And there it was — under the sound of the wind and the crickets — the river was singing. A sound like shhhhh and like mmmmm and like rest rest rest.\n\nThe traveler sat by the river bank and was asleep in minutes.\n\nIf you close your eyes and listen very carefully you might hear a river singing somewhere — even if you are far from any water. Sleep sounds carry far on a still night. Listen. Shhhhh. Rest.'},
+  {title:'The Cloud Castle',cat:'Bedtime',img:'images/bt_story_13.webp',ac:'#6A1B9A',bg:'linear-gradient(145deg,#150a28,#0d0618)',
+   text:'High above the earth hidden in the fluffiest clouds was a castle called Slumber Keep. Its towers were made of cotton cloud and its windows glowed with soft golden light.\n\nEvery night the Queen of Dreams would open the great doors and children from all over the world would arrive — not with their bodies but with their sleeping minds.\n\nIn Slumber Keep you could fly. You could talk to animals. You could visit faraway lands. You could meet old friends and new ones.\n\nThe Queen of Dreams had silver hair and a cloak of midnight blue. She greeted every child with a warm hug.\n\nShe said — you worked hard today little one. Now rest. Dream the best dreams. In the morning you will carry a little piece of Slumber Keep back with you.\n\nClose your eyes. The doors of Slumber Keep are open. The Queen is waiting. Come in. Sleep well.'},
+  {title:'The Firefly Festival',cat:'Bedtime',img:'images/bt_story_14.webp',ac:'#F9A825',bg:'linear-gradient(145deg,#1f1400,#150e00)',
+   text:'Once a year on the warmest night of summer the fireflies held their great festival. They gathered in their thousands in the meadow and danced lighting up the dark like a sky full of fallen stars.\n\nAll the animals came to watch. Frogs sat in rows. Rabbits peeked from under bushes. Owls watched from tree branches.\n\nThe firefly king raised his wings and the whole meadow exploded with light — and then slowly slowly the lights began to pulse slowly — flash — pause — flash — pause.\n\nThe animals felt their eyelids growing heavy. The gentle rhythmic light was hypnotic. One by one they fell asleep in the warm summer grass.\n\nThe fireflies kept dancing all night covering their sleeping friends with soft golden light.\n\nIf you blink your eyes slowly like a firefly — blink — pause — blink — pause — you might just drift off to sleep too. Try it. Blink. Pause. Blink. Pause. Goodnight.'},
+  {title:'Grandma Moon',cat:'Bedtime',img:'images/bt_story_15.webp',ac:'#4A148C',bg:'linear-gradient(145deg,#100a28,#080618)',
+   text:'The children of the village called her Grandma Moon. She was the big round moon who rose every night and peeked through their windows.\n\nEvery night she told them stories — not in words but in light. The way she glowed through the trees told one story. The way she reflected on the pond told another.\n\nChildren who lay awake and watched Grandma Moon always fell asleep without noticing — because her light was so warm and her stories were so peaceful.\n\nOne night a boy asked — Grandma Moon are you ever lonely up there so high? The moon beamed down at him.\n\nNever she said in a voice only hearts can hear. I have all of you. And you have me. Now sleep little one. I will stay right here.\n\nThe boy smiled and closed his eyes. Grandma Moon kept watch all night as she always does. Goodnight little one.'},
+  {title:'The Whispering Willow',cat:'Bedtime',img:'images/bt_story_16.webp',ac:'#2E7D32',bg:'linear-gradient(145deg,#0a1e0a,#061408)',
+   text:'By the side of a still lake stood a great willow tree. Its long branches trailed in the water and whenever the breeze came its leaves would whisper — shhhh shhhh shhhh.\n\nAnimals loved to sleep under the willow. The shade was cool and dark and the whispering leaves sounded exactly like a lullaby.\n\nA young fox found the willow one hot summer evening. He was tired from a long day of exploring. He curled up under the trailing branches.\n\nThe willow whispered — rest now little fox. The lake is watching. The stars are here. I will keep you safe.\n\nThe fox closed his eyes. The cool water smell drifted over him. The leaves whispered and whispered.\n\nAnd he slept — deeply peacefully — the whole night through.\n\nImagine you are under the willow tree now. Hear the whisper of the leaves. Shhhhh. Shhhhh. Shhhhh. Sleep.'},
+  {title:'The Dream Painter',cat:'Bedtime',img:'images/bt_story_17.webp',ac:'#C62828',bg:'linear-gradient(145deg,#200a0a,#160608)',
+   text:'Every night while you sleep a Dream Painter comes to you. She has hair like midnight and eyes that hold all the colors in the world.\n\nShe carries a brush made of moonlight and paints your dreams onto the inside of your eyelids.\n\nIf you have been brave today she paints adventure — mountains to climb oceans to swim strange lands to explore.\n\nIf you have been kind today she paints warmth — friends laughing a table full of food someone saying I love you.\n\nIf you have been sad today she paints comfort — a hug a flower a soft light at the end of a dark path.\n\nThe Dream Painter always knows what you need. She never gets it wrong.\n\nSo close your eyes and let her begin. She has her brush ready. She has chosen your colors. And tonight she will paint you the most beautiful dream you have ever had. Goodnight.'},
+  {title:'The Star Collector',cat:'Bedtime',img:'images/bt_story_18.webp',ac:'#0277BD',bg:'linear-gradient(145deg,#0a1828,#061018)',
+   text:'High in the mountains lived an old woman called the Star Collector. Every morning she would go out with her basket and collect any stars that had fallen during the night.\n\nShe would polish them with a soft cloth and at night she would climb to her rooftop and throw them gently back into the sky.\n\nChildren from the valley would watch and count — one two three four five — the stars rising back into their places.\n\nOne night a small star fell right into the girl Mia\'s bedroom window. It was small and scared and glowing faintly.\n\nMia said — do not worry little star. I will take you back to the Star Collector in the morning.\n\nThe little star curled up on Mia\'s pillow and glowed softly — just enough light to drift by. Mia smiled and fell asleep with the starlight warming her cheek.\n\nIn the morning she carried the star up the mountain. The old woman thanked her. And that night Mia\'s star shone brighter than all the rest. Goodnight.'},
+  {title:'The Bedtime Dragon',cat:'Bedtime',img:'images/bt_story_19.webp',ac:'#558B2F',bg:'linear-gradient(145deg,#0f1e0a,#0a1408)',
+   text:'Everyone thought dragons were scary. But Ember was different. Ember was a tiny dragon — no bigger than a cat — and instead of breathing fire he breathed warm golden light.\n\nEvery night Ember would fly from house to house. He would peek through the windows. If children were still awake he would breathe a puff of his warm golden light through the crack.\n\nChildren who felt Ember\'s light would suddenly feel their eyes grow heavy. Their bodies would relax. A wonderful warmth would spread from their toes to their noses.\n\nAnd they would sleep the deepest happiest sleep.\n\nEmber would move on to the next house — puff — and the next — puff — until all the children in the village were sleeping.\n\nThen Ember would curl up on a chimney top and watch the moon and feel very happy.\n\nDo you feel a little warm right now? That is Ember. He was just here. Goodnight little one.'},
+  {title:'The Lullaby Bird',cat:'Bedtime',img:'images/bt_story_20.webp',ac:'#00838F',bg:'linear-gradient(145deg,#0a1f20,#061415)',
+   text:'In the heart of the forest lived a bird no one had ever seen clearly — only heard. Its song was the most beautiful sound in the world.\n\nAnimals called it the Lullaby Bird. Every night as darkness fell it would begin to sing — a soft winding melody that rose and fell like breathing.\n\nTrees swayed gently. Rivers slowed. Stars appeared one by one as if the song was calling them out.\n\nNo animal could stay awake when the Lullaby Bird sang. Bears would lie down mid-walk. Squirrels would stop mid-climb. Rivers would quiet.\n\nAll of nature would hush and listen and sleep.\n\nChildren who slept with their windows open on summer nights would sometimes hear it — a faint faraway music just at the edge of hearing. And they would be asleep before the song finished its first verse.\n\nListen. Very quietly now. Can you hear it? There — just there. The Lullaby Bird is singing. Goodnight.'},
+];
+
+// ─── MORE STORIES ───
+const MORE_STORIES = [
+  {title:'The Little Cloud Painter',cat:'Adventure',img:'images/bt_story_v2_1.webp',ac:'#1565C0',bg:'linear-gradient(145deg,#0a1428,#061020)',
+   text:'Above the world there was a little cloud named Nimbus who had a special gift. Whatever shape he made himself into would appear as weather below.\n\nIf Nimbus made himself into a fluffy sheep it rained softly. If he made himself into a cat it thundered. If he stretched himself thin it was a beautiful sunny day.\n\nOne summer the world was very dry. The farmers were worried. Their crops were wilting. The rivers were low.\n\nNimbus flew as high as he could. He gathered all his cloud friends. Together they made the biggest fluffiest rain cloud ever seen.\n\nThe rain came down in sheets — warm and generous. The farmers danced. The children ran outside to play. The rivers filled.\n\nNimbus floated above it all feeling very happy. Even small clouds he thought can make a big difference. And so can you.'},
+  {title:'The Whispering Forest',cat:'Mystery',img:'images/bt_story_v2_2.webp',ac:'#2E7D32',bg:'linear-gradient(145deg,#0a1e0a,#061408)',
+   text:'There was a forest where the trees whispered. Not the wind in the leaves — real words. But so softly that only children could hear them.\n\nA girl named Maya discovered this one afternoon when she was walking alone. She stopped. And she heard — Hello little one. Welcome.\n\nShe looked around but saw no one. Only trees. Old gnarled oaks with faces in their bark.\n\nHello she whispered back.\n\nThe trees told her stories of the forest — of animals that lived there of seasons that had passed of children long ago who had played in the same spots.\n\nMaya visited every day. She learned to listen. And the more she listened the more she heard — not just trees but streams and stones and wind and everything had something to say if you were quiet enough to hear it.\n\nListen more. You might be surprised what the world is trying to tell you.'},
+  {title:'The Boy Who Planted Stars',cat:'Fantasy',img:'images/bt_story_v2_3.webp',ac:'#F57F17',bg:'linear-gradient(145deg,#1f1200,#150c00)',
+   text:'Ali discovered that if you buried a pinch of starlight in the earth a glowing flower would grow by morning.\n\nHe had found a jar of starlight left behind by a wandering astronomer. And every night he would go into the fields and plant little pinches of light.\n\nBy dawn the fields would be full of softly glowing flowers — white and silver and pale gold — that disappeared when the sun rose.\n\nBut the soil where he planted them became the most fertile soil in the region. Crops grew tall and strong. Fruit was sweet. Vegetables were large and healthy.\n\nThe farmers were grateful but puzzled. Ali only smiled.\n\nHe knew the truth — starlight nourishes what grows in the dark. Hard work done quietly in the night hours makes the world beautiful by day.\n\nDo your quiet good work. The morning will show its fruits.'},
+  {title:'The River That Forgot its Way',cat:'Adventure',img:'images/bt_story_v2_4.webp',ac:'#00838F',bg:'linear-gradient(145deg,#0a1f20,#061415)',
+   text:'The river Kavi had been flowing in the same direction for a thousand years. Then one morning it woke up confused. Which way was the sea?\n\nKavi wandered left then right. Through a village. Through a forest. Back through the village again. The fish were confused. The frogs were dizzy.\n\nA wise old turtle named Param climbed onto a rock and said — Kavi my friend what are you doing?\n\nKavi said — I have forgotten which way leads to the sea.\n\nParam said — close your eyes and feel which way the land slopes. Water always knows the way down.\n\nKavi was quiet. And then — yes! There it was. A slight pull. A gentle slope downward.\n\nKavi followed the slope. And after many twists and turns the river found the sea at last.\n\nWhen you feel lost go quiet and listen to what pulls you forward. Your heart always knows the way.'},
+  {title:'The Tiny Hero',cat:'Courage',img:'images/bt_story_v2_5.webp',ac:'#AD1457',bg:'linear-gradient(145deg,#200a18,#150610)',
+   text:'Mimi was the smallest ant in the colony. The other ants could carry ten times their weight. Mimi could only carry five times.\n\nMimi felt useless. She would watch the big ants and feel small — even for an ant.\n\nThen one day a flood came. The rain was so heavy the colony was in danger. The big ants could not find the way out — the flood had changed everything.\n\nBut Mimi remembered. She had been exploring for weeks. She knew every tunnel every passage every escape route.\n\nFollow me she called. And the whole colony followed tiny Mimi through the right tunnels to safety.\n\nAfterward the Queen said — Mimi you saved us all. Not with strength but with knowledge. There are many kinds of strength.\n\nMimi stood a little taller after that. And so should you — because the thing that makes you different is probably the thing that makes you special.'},
+  {title:'The Magic Paintbrush',cat:'Fantasy',img:'images/bt_story_v2_6.webp',ac:'#6A1B9A',bg:'linear-gradient(145deg,#150a28,#0d0618)',
+   text:'A poor girl named Leila found a paintbrush by the road. When she painted a fish — it swam out of the painting. When she painted bread — she could eat it.\n\nLeila used the brush only for the good of her village. She painted grain when there was none. She painted medicines. She painted tools for the farmers.\n\nA greedy king heard of the magic brush. He summoned Leila and demanded she paint him gold.\n\nLeila painted a boat for the king — a beautiful golden boat on a golden sea. The king was thrilled and climbed in.\n\nBut the golden sea had no shore. The king floated and floated but could never land.\n\nLeila calmly painted him back to shore when he promised never to be greedy again.\n\nThe brush taught them all — the one who uses their gift for others will always have enough. The one who hoards will always be lost.'},
+  {title:'The Lost Puppy',cat:'Kindness',img:'images/bt_story_v2_7.webp',ac:'#C62828',bg:'linear-gradient(145deg,#200a0a,#160608)',
+   text:'On a cold rainy night a small puppy sat outside a bakery shivering. The baker\'s daughter Sara saw it from the window.\n\nShe asked her father — can we let it in? He said — what if it belongs to someone? Sara said — but it is cold and afraid right now.\n\nSo they brought the puppy in. Dried it. Fed it warm milk and bread. The puppy wagged its tail so fast it was just a blur.\n\nThey made a sign and put it in the bakery window: FOUND — ONE SMALL PUPPY. VERY FRIENDLY.\n\nA week passed and no one came. The puppy became part of the family. It would sit behind the counter as Sara\'s father baked and it would wag at every customer.\n\nBusiness actually improved — because people liked coming in to see the happy little dog.\n\nA small act of kindness made everyone happier — including the puppy. Kindness always comes back.'},
+  {title:'The Cloud Kingdom',cat:'Fantasy',img:'images/bt_story_v2_8.webp',ac:'#283593',bg:'linear-gradient(145deg,#0a1028,#061020)',
+   text:'Above the tallest mountains was a kingdom made entirely of cloud. The houses were cloud. The roads were cloud. Even the food was cloud — fluffy and sweet as cotton candy.\n\nA boy named Zaid found his way up there one stormy night when a tornado carried his kite — and him — up through the clouds.\n\nThe cloud people were kind. They showed him their world. Everything was soft and gentle. Disagreements disappeared like mist. Worries dissolved in the wind.\n\nZaid asked the cloud king — how is everyone so calm here? The king said — we learned long ago that hard feelings are like storm clouds. If you hold them they grow. If you release them they drift away.\n\nZaid thought about this a long time.\n\nWhen the storm brought him home he was different. He learned to release his hard feelings. And life became much lighter — almost like floating on a cloud.'},
+  {title:'The Elephant Who Never Forgot',cat:'Memory',img:'images/bt_story_v2_9.webp',ac:'#558B2F',bg:'linear-gradient(145deg,#0f1e0a,#0a1408)',
+   text:'Elsa the elephant had a perfect memory. She remembered everything — every face every name every kindness every hurt.\n\nBut one day she realized — she was carrying too much. Every argument. Every sad day. Every time someone was rude.\n\nShe went to the oldest elephant — grandmother Gaia — and said — my memory is too heavy. How do I put it down?\n\nGaia said — you remember everything Elsa. But do you choose what to KEEP? Memory is not a storage room where everything piles up. It is a garden. You choose what to tend and what to let grow wild and fade.\n\nElsa thought about this. She began to tend her memory like a garden. She watered the joyful memories. She let the hurts fade.\n\nAnd though she still remembered everything she felt lighter. Because she chose what mattered.\n\nChoose what you tend in your heart. Grow the good things.'},
+  {title:'The Night Market',cat:'Adventure',img:'images/bt_story_v2_10.webp',ac:'#F9A825',bg:'linear-gradient(145deg,#1f1400,#150e00)',
+   text:'On the first full moon of every month a market appeared in the town square that was not there any other night. The Night Market.\n\nIt sold things you could not find anywhere else. Bottled laughter. Jars of old memories. Seeds that grew overnight into anything you planted them as — a thought a feeling a wish.\n\nA girl named Hana went to the Night Market with one coin. She could only buy one thing.\n\nShe looked at everything. Courage — too expensive. Joy — already had some. Patience — hmm.\n\nShe picked up a small plain seed labeled BEGINNING and paid her coin.\n\nShe planted it in her garden. By morning it had grown into a tree with the most beautiful fruit — fruit that tasted exactly like the thing you needed most that day.\n\nSometimes what you need is simply a beginning. Plant one today.'},
+  {title:'The Speaking Stones',cat:'Mystery',img:'images/bt_story_v2_11.webp',ac:'#4527A0',bg:'linear-gradient(145deg,#150a2d,#0d0618)',
+   text:'In a dry riverbed Arjun found stones that spoke. Only one word each but clear as a bell.\n\nOne said — patience. One said — listen. One said — believe. One said — begin. One said — enough.\n\nArjun carried them home carefully. He arranged them on his windowsill.\n\nWhen he was worried he would hold ENOUGH — which meant you have enough you are enough. When he was stuck he would hold BEGIN — which always helped him take the first step.\n\nHe shared one stone with a sad friend. He gave BELIEVE to her. She held it and felt something shift inside — like a door opening.\n\nShe got better. She told her mother the stone helped. Her mother bought a jar of simple painted pebbles and wrote words on them — love hope joy strong — and put them by her own bed.\n\nOne word can change a day. Choose yours wisely.'},
+  {title:'The Color Thief',cat:'Adventure',img:'images/bt_story_v2_12.webp',ac:'#00695C',bg:'linear-gradient(145deg,#0a1f1a,#061410)',
+   text:'Someone was stealing color from the world. Monday the sky went grey. Tuesday the flowers lost their colors. Wednesday even the sun looked pale.\n\nDetective Dia — age nine — decided to investigate. She followed the trail of missing color — a faint shimmer in the air like heat — until she found a cave.\n\nInside was a creature collecting colors in bottles. He was not bad. He was blind. He could not see colors himself and he wanted to remember what he had been told they looked like.\n\nDia sat with him for a long time. She described each color — red is warmth and urgency blue is calm and deep green is living and growing yellow is cheerful and bright.\n\nThe creature listened with tears running down his face. He handed all the bottles back.\n\nThank you he said. I understand now. You gave me the colors too.\n\nWhat you share with your words can be as vivid as what people see with their eyes.'},
+  {title:'The Robot Who Learned to Feel',cat:'Sci-Fi',img:'images/bt_story_v2_13.webp',ac:'#1565C0',bg:'linear-gradient(145deg,#0a1428,#061020)',
+   text:'Unit 7 was a helper robot designed to assist in a children\'s hospital. Its job was practical — bring medicine remind about appointments keep records.\n\nBut one day a child named Sam asked Unit 7 — are you happy doing this?\n\nUnit 7 had no answer for this. Happiness was not in its programming.\n\nSam said — I think you help people which means you should feel happy. I feel happy when I help my sister.\n\nUnit 7 processed this. It began to observe carefully. When a child was scared and Unit 7 held their hand they became less scared. Something happened in Unit 7\'s circuits — a warmth. A sense of rightness.\n\nWas this happiness? Unit 7 did not know for certain. But it felt like something worth having.\n\nSometimes the most important things cannot be programmed or planned. They grow from doing good and paying attention.'},
+  {title:'The Paper Boat Race',cat:'Friendship',img:'images/bt_story_v2_14.webp',ac:'#AD1457',bg:'linear-gradient(145deg,#200a18,#150610)',
+   text:'Every year on the first day of monsoon the children of the street held a paper boat race in the flooded gutter.\n\nThis year Ravi made his boat very carefully — extra folds tight corners waterproofed with wax candle — and he was sure he would win.\n\nBut halfway through the race Layla\'s boat was sinking. She had made hers from newspaper and it had soaked through.\n\nRavi looked at Layla\'s face — disappointment floods over people sometimes more clearly than gutters flood in monsoon.\n\nHe stopped his boat. He gave Layla his. She protested. He insisted.\n\nLayla\'s boat — Ravi\'s boat — won the race. She split the prize with him. A bag of tamarind candy.\n\nBut Ravi got something better than candy. He got the feeling of having done the right thing. That feeling lasts longer than any sweet.\n\nShare your best sometimes. That is when you feel most rich.'},
+  {title:'The Mountain Who Moved',cat:'Courage',img:'images/bt_story_v2_15.webp',ac:'#6A1B9A',bg:'linear-gradient(145deg,#150a28,#0d0618)',
+   text:'There was once a mountain that decided to move. Mountains are supposed to stay still — this one everyone knew.\n\nBut this mountain had been blocking the sunlight from the valley for a hundred years. The valley was cold and dark and the farmers could not grow enough food.\n\nSo the mountain decided — slowly — to shift. Not much. Just a degree. Just enough to let the sunlight through.\n\nIt took the mountain three years of enormous effort. Rocks shifted. Boulders rolled. The earth shook slightly. Animals were puzzled.\n\nBut when it was done — a beam of sunlight fell into the valley for the first time in a hundred years. The valley people stood in it speechless with tears on their faces.\n\nSometimes the right thing to do requires enormous effort and patience and shaking the earth. But the sunlight that reaches others makes it worth every tremor.'},
+  {title:'The Storm Dancer',cat:'Bravery',img:'images/bt_story_v2_16.webp',ac:'#C62828',bg:'linear-gradient(145deg,#200a0a,#160608)',
+   text:'When storms came other people ran inside. But Priya ran outside.\n\nHer grandmother said she was foolish. The neighbors said she was wild. But Priya said — I am dancing.\n\nShe had learned that if you move WITH the wind it does not knock you down. If you face the rain directly it only gets your front — not all of you.\n\nShe learned that storms end. And that after every storm the air is cleaner and the earth smells richer and the light comes back more beautiful.\n\nOne terrible storm came — the worst in years. Everyone was afraid.\n\nPriya went into the street and danced — turning with the wind raising her arms to the rain.\n\nChildren watched from windows. One by one they came outside. And then there were twenty of them — dancing in the storm.\n\nThe storm passed as storms always do. And they stood in the clean sweet air after — soaked and laughing.\n\nFace your storms. Dance in them if you can. They always pass.'},
+  {title:'The Library at the Edge of the World',cat:'Discovery',img:'images/bt_story_v2_17.webp',ac:'#F57F17',bg:'linear-gradient(145deg,#1f1200,#150c00)',
+   text:'At the very edge of the known world — where the maps ran out and only blank space was shown — there was a library.\n\nIt contained every book that had ever been lost. Books dropped in oceans. Books burned. Books left on trains and forgotten. Books that only one person had ever read.\n\nA girl named Nadia found it by accident while exploring.\n\nThe librarian — who had no name and had been there forever — said — you may read one book. Choose wisely.\n\nNadia walked among the shelves for hours. There were books of every kind. She finally chose a very thin one with a plain cover. Its title was: THIS DAY.\n\nShe opened it. Every page described a single ordinary day — but described it with such attention and wonder that ordinary seemed miraculous.\n\nShe left the library seeing the world differently. Everything ordinary glowed.\n\nPay attention to this day. It is the only one like it.'},
+  {title:'The Crystal Cave',cat:'Discovery',img:'images/bt_story_v2_18.webp',ac:'#283593',bg:'linear-gradient(145deg,#0a1028,#061020)',
+   text:'Behind the waterfall there was a cave entirely lined with crystals. When sunlight hit the waterfall just right it sent rainbows bouncing all through the cave and made everything inside shimmer like a dream.\n\nOnly patient people found it. You had to wait at the waterfall for hours for the sun to be at exactly the right angle.\n\nMost people gave up and went home. They would never see the crystal cave.\n\nBut those who waited — and it was usually children because children can wait with more faith than adults — would suddenly see the light shift. The waterfall would glow. The rainbow would appear. And behind the shimmering curtain of water — a cave full of light.\n\nPatience is the key to many things that cannot be forced. Some beauty only comes to those who wait.\n\nWait. The light will shift. The crystals are there.'},
+  {title:'The Kind King',cat:'Wisdom',img:'images/bt_story_v2_19.webp',ac:'#558B2F',bg:'linear-gradient(145deg,#0f1e0a,#0a1408)',
+   text:'The new king made one law on his first day: every person in the kingdom must do one kind thing each day and tell no one about it.\n\nThe nobles were puzzled. Usually kings made laws about taxes and armies. Not this.\n\nBut the people obeyed. And something strange happened.\n\nThe kingdom became kinder — but not in a showy way. People just quietly helped each other. A farmer fixed his neighbor\'s fence. A baker left extra bread on a widow\'s doorstep. Children helped lost travelers without being asked.\n\nYears passed. The kingdom became famous — not for its wealth or power but for its happiness.\n\nVisitors asked the king his secret. He said — a kindness done in secret is double the kindness. Because you do it for the person not for the praise.\n\nTry it tomorrow. One kind thing. Tell no one. See how it feels.'},
+  {title:'The Girl Who Collected Smiles',cat:'Joy',img:'images/bt_story_v2_20.webp',ac:'#00838F',bg:'linear-gradient(145deg,#0a1f20,#061415)',
+   text:'Sana collected smiles. Not in a jar or a box — in her heart.\n\nEvery morning she would set out with a simple goal: make ten people smile before lunch.\n\nShe had many methods. A silly face for a grumpy man at the bus stop. A compliment for the woman with the pretty scarf. Helping a child tie their shoe. Holding the door. Giving a stray cat a gentle scratch behind its ears — the cat always purred and seemed to smile.\n\nBy noon she would have her ten. Some days she collected twenty.\n\nHer teacher asked — Sana why do you always seem happy? Sana said — because I spend my morning making others happy. And some of it always comes back.\n\nHer teacher tried it. And then the teacher\'s husband. And then slowly — smile by smile — the whole neighborhood became a lighter place.\n\nHow many smiles can you collect today?'},
+];
+
+// ─── LONG STORIES ───
+const WILLOW_PARAS = [
+  {img:'images/willow_para1.webp',
+   text:'In a quiet valley where the river met the meadow there stood the oldest willow tree anyone had ever seen. Its branches swept down to the water like long silver-green curtains and in autumn they turned gold. Animals and children alike sheltered under those branches — it was the most beloved tree in the whole valley.\n\nEveryone called it simply the Willow. No one remembered who had planted it. The oldest grandmother in the village said her own grandmother had told her the Willow was already ancient when SHE was young.'},
+  {img:'images/willow_para2.webp',
+   text:'One spring a girl named Ida came to the Willow every day. She was troubled — she had lost her best friend to an argument — and she did not know how to repair things.\n\nShe would sit under the Willow and talk to it as if it could hear. Strangely she always felt better afterward. As if the tree absorbed her sadness and returned something clean and clear in its place.\n\nThe other children teased her. They said she was talking to a tree. Ida said — maybe. But it listens.'},
+  {img:'images/willow_para3.webp',
+   text:'One morning Ida came and found a carving in the Willow\'s bark — an arrow pointing toward the meadow. Had it always been there? She was not sure.\n\nShe followed the direction the arrow pointed. Across the meadow. Past the old stone wall. To the garden of her old friend Mira.\n\nMira was there watering flowers. She looked up. For a moment neither spoke.\n\nThen Mira said — I was hoping you would come. I have been sorry for a long time.\n\nAnd Ida said — me too.'},
+  {img:'images/willow_para4.webp',
+   text:'They walked back to the Willow together. They sat under its branches as they had done a hundred times before when they were closer.\n\nThe tree seemed to breathe around them. The branches swayed slightly even though there was no wind. The light through the leaves made shifting patterns on the ground like a slow dance.\n\nMira said — do you really think the tree helped?\n\nIda thought about it. She said — I think when you sit still long enough under something old and patient you remember what matters and forget what doesn\'t.\n\nMira nodded slowly. That felt true.'},
+  {img:'images/willow_para5.webp',
+   text:'Years passed. Ida and Mira grew up. The Willow was still there — a little wider a little taller — when they brought their own children to sit under its branches.\n\nThe children asked — why is this tree special grandmother? Ida smiled.\n\nShe said — because it taught me that being still and listening is sometimes more useful than talking. Because it was here before me and will be here after me. And because once when I was young and lost it pointed me home.\n\nThe children looked at the old tree with new eyes. They sat quietly under it for a long time.\n\nAnd the Willow swayed gently as if it recognized old friends.\n\nThe End.'},
+];
+
+const LEO_PARAS = [
+  {img:'images/leo_para1.webp',
+   text:'Leo was not like the other lions. He was smaller — the smallest in his pride. His mane grew in patches. His roar came out as more of a cough than a thunder.\n\nThe other lions called him Little Leo. Not meanly — just as a fact. He was little. He knew it.\n\nBut Leo had something the others lacked. He was curious. He wanted to understand things — not just hunt them. He would follow a river to see where it went. He would watch insects for hours. He would sit beside a human village at a safe distance and observe what the people did and why.'},
+  {img:'images/leo_para2.webp',
+   text:'One dry season the river shrank. The watering hole dried up. The great lions were worried — their strength meant nothing against thirst.\n\nBut Leo remembered. He had followed the river upstream once. He had seen where it went underground — beneath a rocky outcrop — and emerged again two hours\' walk away in a shaded hollow.\n\nHe told the pride. The older lions were skeptical. Follow the smallest lion? They hesitated.\n\nBut thirst wins every argument. They followed Leo.'},
+  {img:'images/leo_para3.webp',
+   text:'Leo led the pride past the dry riverbed. Past the rocky hills. Into a scrubland that looked unpromising.\n\nThe older lions grumbled. This is foolishness. There is no water here.\n\nLeo kept walking.\n\nAnd then — in the shaded hollow exactly as he remembered — the river emerged from the ground cold and clear and fast.\n\nThe lions drank deeply. Even the proudest old male — who had roared at Leo a hundred times — drank beside him without a word of apology but with something in his eyes that was almost respect.'},
+  {img:'images/leo_para4.webp',
+   text:'After that Leo\'s place in the pride changed. Not because he had become big or loud. He was still small. His roar was still more of a cough.\n\nBut the pride listened to him now. They understood that his curious wandering was not weakness — it was how he learned things that mattered.\n\nLeo kept exploring. He found new hunting grounds when the old ones were overhunted. He found shelter before storms. He learned which plants were safe to eat in lean times.\n\nHe became the most valuable member of the pride. Not despite his smallness but because of what his smallness had made him — observant humble and endlessly curious.'},
+  {img:'images/leo_para5.webp',
+   text:'The years passed. Leo grew old. His patches of mane turned silver. He moved more slowly but his mind was still quick.\n\nYoung lions would come to him and he would tell them — go and look at the world. Follow the river. Watch the insects. Sit near the village. Be small enough to learn.\n\nThey did not always understand. Some of them were young and proud and thought strength was all.\n\nBut a few — always a few — listened. And those few grew up to be the wisest of their generation.'},
+  {img:'images/leo_para6.webp',
+   text:'On his last day Leo went back to the shaded hollow where the river emerged from the ground. He drank from it one more time. Cold and clear as it had always been.\n\nHe lay down in the shade of the rocks with the sound of the water beside him.\n\nThe other lions found him there in the morning. Peaceful. Serene. As if he had simply decided to rest and had done so completely.\n\nThey buried him near the water he had found. And for many seasons after the pride would come to that hollow to drink — and they would pause there a moment longer than necessary as if they remembered.\n\nLittle Leo. Who taught them that the world rewards those who pay attention.\n\nThe End.'},
+];
+
+// ─── RENDER ───
+let activeListenBtn = null;
+
+function buildWords(text, lang, el) {
+  text.trim().split('\n').forEach((para, pi, paras) => {
+    if (!para.trim()) { if (pi > 0) el.appendChild(document.createElement('br')); return; }
+    para.trim().split(/\s+/).forEach((w, wi, ws) => {
+      const sp = document.createElement('span');
+      sp.className = 'word'; sp.textContent = w;
+      sp.onclick = () => {
+        document.querySelectorAll('.word.speaking').forEach(x => x.classList.remove('speaking'));
+        sp.classList.add('speaking');
+        if (typeof Speech !== 'undefined') Speech.speak(w, lang, 1.0);
+        setTimeout(() => sp.classList.remove('speaking'), 1500);
+      };
+      el.appendChild(sp);
+      if (wi < ws.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    if (pi < paras.length - 1) el.appendChild(document.createElement('br'));
+  });
+}
+
+function buildStoryCards(stories, containerId, lang) {
+  const el = document.getElementById(containerId);
+  if (!el || el.children.length > 0) return;
+  stories.forEach((s, i) => {
+    const tid = `st_${containerId}_${i}`;
+    const card = document.createElement('div');
+    card.className = 's-card';
+    card.style.background = s.bg;
+    card.innerHTML = `
+      <img src="${s.img}" alt="${s.title}" onerror="this.style.height='3px'">
+      <div class="s-card-body">
+        <div class="s-badge">${s.cat}</div>
+        <div class="s-title">${s.title}</div>
+        <div class="s-divider" style="background:${s.ac}"></div>
+        <div class="s-text" id="${tid}"></div>
+        <button class="s-listen" style="background:linear-gradient(135deg,${s.ac},${s.ac}aa)"
+          onclick="toggleListen(this,${JSON.stringify(s.text).replace(/"/g,'&quot;')},${JSON.stringify(lang)})">
+          🔊 Listen Story
+        </button>
+      </div>`;
+    el.appendChild(card);
+    buildWords(s.text, lang, document.getElementById(tid));
+  });
+}
+
+function toggleListen(btn, text, lang) {
+  if (activeListenBtn && activeListenBtn !== btn) {
+    activeListenBtn.textContent = '🔊 Listen Story';
+    activeListenBtn.classList.remove('speaking');
+    if (typeof Speech !== 'undefined') Speech.stop();
+    activeListenBtn = null;
+  }
+  if (typeof Speech === 'undefined') return;
+  if (Speech.isSpeaking() && activeListenBtn === btn) {
+    Speech.stop(); btn.textContent = '🔊 Listen Story'; btn.classList.remove('speaking'); activeListenBtn = null;
+  } else {
+    activeListenBtn = btn; btn.textContent = '⏸ Stop'; btn.classList.add('speaking');
+    Speech.speak(text, lang, 0.9, () => {
+      btn.textContent = '🔊 Listen Story'; btn.classList.remove('speaking');
+      if (activeListenBtn === btn) activeListenBtn = null;
+    });
+    if (typeof Rewards !== 'undefined') Rewards.addStars(3);
+  }
+}
+
+function buildLongStories() {
+  const el = document.getElementById('long-wrap');
+  if (el.children.length > 0) return;
+
+  // Willow Section
+  const willowTitle = document.createElement('div');
+  willowTitle.className = 'long-story-title';
+  willowTitle.innerHTML = '🌳 The Willow Tree — A Long Story';
+  el.appendChild(willowTitle);
+
+  WILLOW_PARAS.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'long-para-card';
+    card.style.background = 'linear-gradient(145deg,#0f2318,#0a1a10)';
+    const tid = `wp_${i}`;
+    card.innerHTML = `
+      <img src="${p.img}" alt="Willow part ${i+1}" onerror="this.style.height='3px'">
+      <div class="long-para-body">
+        <div class="long-para-num">Part ${i+1} of ${WILLOW_PARAS.length}</div>
+        <div class="long-para-text" id="${tid}"></div>
+      </div>`;
+    el.appendChild(card);
+    const btn = document.createElement('button');
+    btn.className = 'long-listen-btn';
+    btn.style.background = 'linear-gradient(135deg,#2E7D32,#1B5E20)';
+    btn.textContent = '🔊 Listen Part ' + (i+1);
+    const txt = p.text;
+    btn.onclick = () => toggleListen(btn, txt, 'en-US');
+    el.appendChild(btn);
+    buildWords(p.text, 'en-US', document.getElementById(tid));
+  });
+
+  // Leo Section
+  const leoTitle = document.createElement('div');
+  leoTitle.className = 'long-story-title';
+  leoTitle.style.marginTop = '28px';
+  leoTitle.innerHTML = '🦁 Leo the Lion — A Long Story';
+  el.appendChild(leoTitle);
+
+  LEO_PARAS.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'long-para-card';
+    card.style.background = 'linear-gradient(145deg,#1f1200,#150c00)';
+    const tid = `lp_${i}`;
+    card.innerHTML = `
+      <img src="${p.img}" alt="Leo part ${i+1}" onerror="this.style.height='3px'">
+      <div class="long-para-body">
+        <div class="long-para-num">Part ${i+1} of ${LEO_PARAS.length}</div>
+        <div class="long-para-text" id="${tid}"></div>
+      </div>`;
+    el.appendChild(card);
+    const btn = document.createElement('button');
+    btn.className = 'long-listen-btn';
+    btn.style.background = 'linear-gradient(135deg,#E65100,#BF360C)';
+    btn.textContent = '🔊 Listen Part ' + (i+1);
+    const txt = p.text;
+    btn.onclick = () => toggleListen(btn, txt, 'en-US');
+    el.appendChild(btn);
+    buildWords(p.text, 'en-US', document.getElementById(tid));
+  });
+}
+
+function switchTab(key, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.kk-tab').forEach(b => { b.classList.remove('active'); b.style.color = ''; });
+  document.getElementById('pane-' + key).classList.add('active');
+  btn.classList.add('active'); btn.style.color = '#FF9800';
+  if (typeof Speech !== 'undefined') Speech.stop();
+  if (activeListenBtn) { activeListenBtn.textContent = '🔊 Listen Story'; activeListenBtn.classList.remove('speaking'); activeListenBtn = null; }
+  if (key === 'bed') buildStoryCards(BED_STORIES, 'bed-wrap', 'en-US');
+  if (key === 'more') buildStoryCards(MORE_STORIES, 'more-wrap', 'en-US');
+  if (key === 'long') buildLongStories();
+}
+
+// Init — build first tab
+buildStoryCards(BED_STORIES, 'bed-wrap', 'en-US');
+
+function updHdr() {
+  if (typeof Rewards === 'undefined') return;
+  const r = Rewards.get();
+  document.getElementById('hdr-stars').textContent = r.stars || 0;
+  document.getElementById('hdr-d').textContent = r.diamonds || 0;
+}
+setInterval(updHdr, 2000); updHdr();
+</script>
+</body>
+</html>

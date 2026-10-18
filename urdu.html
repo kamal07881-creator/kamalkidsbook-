@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Urdu — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-logo-icon{background:linear-gradient(135deg,#2193b0,#6dd5ed)}
+.kk-tab.active{color:#6dd5ed}
+.kk-header,.kk-tabs,.kk-bnav{direction:ltr}
+.alpha-card-body{direction:rtl}
+.alpha-letter{font-family:'Noto Nastaliq Urdu',serif!important;font-size:3.5rem!important}
+.alpha-word{font-family:'Noto Nastaliq Urdu',serif!important;font-size:1.8rem!important}
+.alpha-phrase{font-family:'Noto Nastaliq Urdu',serif!important}
+.s-title,.s-text{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right}
+</style>
+</head>
+<body>
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🌙</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Urdu</div>
+      <div class="brand-bot">اردو کورس 📚</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<div class="kk-tabs" style="direction:ltr">
+  <button class="kk-tab active" onclick="switchTab('pane-harf',this,'#6dd5ed')">حروف تہجی</button>
+  <button class="kk-tab" onclick="switchTab('pane-grid',this,'#6dd5ed');buildUrduGrid()">Grid</button>
+  <button class="kk-tab" onclick="switchTab('pane-stories',this,'#6dd5ed');buildUrduStories()">کہانیاں 📖</button>
+</div>
+
+<div id="pane-harf" class="tab-pane active kk-main">
+  <div class="alpha-wrap">
+    <div class="alpha-card" id="ur-card">
+      <img src="images/u_1.webp" alt="" style="width:100%;height:62%;object-fit:cover">
+      <div class="alpha-card-body">
+        <div class="alpha-letter" id="ur-letter" style="color:#2193b0">ا</div>
+        <div class="alpha-word" id="ur-word">انار</div>
+        <div class="alpha-hindi" id="ur-hindi" style="direction:ltr">Pomegranate</div>
+        <div class="alpha-phrase" id="ur-phrase">ا سے انار</div>
+      </div>
+    </div>
+    <div class="alpha-controls" style="direction:ltr">
+      <button class="alpha-btn" onclick="urPrev()">◀</button>
+      <button class="alpha-play" id="ur-play" style="background:linear-gradient(135deg,#2193b0,#6dd5ed);color:#fff" onclick="urPlayFn()">▶</button>
+      <button class="alpha-btn" onclick="urNext()">▶</button>
+    </div>
+    <div id="ur-counter" style="color:rgba(255,255,255,0.5);text-align:center;font-size:0.85rem;padding-bottom:8px;direction:ltr">1 / 39</div>
+  </div>
+</div>
+
+<div id="pane-grid" class="tab-pane kk-main">
+  <div class="grid-wrap"><div class="alpha-grid" id="ur-grid"></div></div>
+</div>
+
+<div id="pane-stories" class="tab-pane kk-main">
+  <div class="s-wrap" id="ur-stories-wrap"></div>
+</div>
+
+<nav class="kk-bnav" style="direction:ltr">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const UR_ALPHA=[
+  {letter:'ا',word:'انار',hindi:'Pomegranate',img:'images/u_1.webp',phrase:'ا سے انار',color:'#F44336'},
+  {letter:'ب',word:'بکری',hindi:'Goat',img:'images/u_2.webp',phrase:'ب سے بکری',color:'#E91E63'},
+  {letter:'پ',word:'پھول',hindi:'Flower',img:'images/u_3.webp',phrase:'پ سے پھول',color:'#9C27B0'},
+  {letter:'ت',word:'تتلی',hindi:'Butterfly',img:'images/u_4.webp',phrase:'ت سے تتلی',color:'#3F51B5'},
+  {letter:'ٹ',word:'ٹوپی',hindi:'Hat',img:'images/u_5.webp',phrase:'ٹ سے ٹوپی',color:'#2196F3'},
+  {letter:'ث',word:'ثمر',hindi:'Fruit',img:'images/u_6.webp',phrase:'ث سے ثمر',color:'#00BCD4'},
+  {letter:'ج',word:'جہاز',hindi:'Ship',img:'images/u_7.webp',phrase:'ج سے جہاز',color:'#009688'},
+  {letter:'چ',word:'چاند',hindi:'Moon',img:'images/u_8.webp',phrase:'چ سے چاند',color:'#4CAF50'},
+  {letter:'ح',word:'حلوہ',hindi:'Sweet',img:'images/u_9.webp',phrase:'ح سے حلوہ',color:'#8BC34A'},
+  {letter:'خ',word:'خرگوش',hindi:'Rabbit',img:'images/u_10.webp',phrase:'خ سے خرگوش',color:'#FFC107'},
+  {letter:'د',word:'درخت',hindi:'Tree',img:'images/u_11.webp',phrase:'د سے درخت',color:'#FF9800'},
+  {letter:'ڈ',word:'ڈبہ',hindi:'Box',img:'images/u_12.webp',phrase:'ڈ سے ڈبہ',color:'#FF5722'},
+  {letter:'ذ',word:'ذہین',hindi:'Intelligent',img:'images/u_13.webp',phrase:'ذ سے ذہین',color:'#795548'},
+  {letter:'ر',word:'روٹی',hindi:'Bread',img:'images/u_14.webp',phrase:'ر سے روٹی',color:'#607D8B'},
+  {letter:'ڑ',word:'ڑیل',hindi:'Rail',img:'images/u_15.webp',phrase:'ڑ سے ڑیل',color:'#F44336'},
+  {letter:'ز',word:'زمین',hindi:'Earth',img:'images/u_16.webp',phrase:'ز سے زمین',color:'#9C27B0'},
+  {letter:'ژ',word:'ژالہ',hindi:'Hail',img:'images/u_17.webp',phrase:'ژ سے ژالہ',color:'#2196F3'},
+  {letter:'س',word:'سیب',hindi:'Apple',img:'images/u_18.webp',phrase:'س سے سیب',color:'#4CAF50'},
+  {letter:'ش',word:'شیر',hindi:'Lion',img:'images/u_19.webp',phrase:'ش سے شیر',color:'#FFC107'},
+  {letter:'ص',word:'صبح',hindi:'Morning',img:'images/u_20.webp',phrase:'ص سے صبح',color:'#FF9800'},
+  {letter:'ض',word:'ضرورت',hindi:'Need',img:'images/u_21.webp',phrase:'ض سے ضرورت',color:'#E91E63'},
+  {letter:'ط',word:'طوطا',hindi:'Parrot',img:'images/u_22.webp',phrase:'ط سے طوطا',color:'#3F51B5'},
+  {letter:'ظ',word:'ظالم',hindi:'Cruel',img:'images/u_23.webp',phrase:'ظ سے ظالم',color:'#00BCD4'},
+  {letter:'ع',word:'عقل',hindi:'Wisdom',img:'images/u_24.webp',phrase:'ع سے عقل',color:'#009688'},
+  {letter:'غ',word:'غبارہ',hindi:'Balloon',img:'images/u_25.webp',phrase:'غ سے غبارہ',color:'#8BC34A'},
+  {letter:'ف',word:'فیل',hindi:'Elephant',img:'images/u_26.webp',phrase:'ف سے فیل',color:'#FF5722'},
+  {letter:'ق',word:'قلم',hindi:'Pen',img:'images/u_27.webp',phrase:'ق سے قلم',color:'#795548'},
+  {letter:'ک',word:'کتاب',hindi:'Book',img:'images/u_28.webp',phrase:'ک سے کتاب',color:'#607D8B'},
+  {letter:'گ',word:'گائے',hindi:'Cow',img:'images/u_29.webp',phrase:'گ سے گائے',color:'#F44336'},
+  {letter:'ل',word:'لڑکی',hindi:'Girl',img:'images/u_30.webp',phrase:'ل سے لڑکی',color:'#9C27B0'},
+  {letter:'م',word:'مچھلی',hindi:'Fish',img:'images/u_31.webp',phrase:'م سے مچھلی',color:'#2196F3'},
+  {letter:'ن',word:'ناریل',hindi:'Coconut',img:'images/u_32.webp',phrase:'ن سے ناریل',color:'#4CAF50'},
+  {letter:'و',word:'وقت',hindi:'Time',img:'images/u_33.webp',phrase:'و سے وقت',color:'#FFC107'},
+  {letter:'ہ',word:'ہاتھی',hindi:'Elephant',img:'images/u_34.webp',phrase:'ہ سے ہاتھی',color:'#FF9800'},
+  {letter:'ھ',word:'ھدہد',hindi:'Hoopoe',img:'images/u_35.webp',phrase:'ھ سے ھدہد',color:'#E91E63'},
+  {letter:'ء',word:'آسمان',hindi:'Sky',img:'images/u_36.webp',phrase:'ء سے آسمان',color:'#3F51B5'},
+  {letter:'ی',word:'یاقوت',hindi:'Ruby',img:'images/u_37.webp',phrase:'ی سے یاقوت',color:'#00BCD4'},
+  {letter:'ے',word:'بے',hindi:'Letter',img:'images/u_38.webp',phrase:'ے حرف',color:'#009688'},
+  {letter:'لا',word:'لا',hindi:'No',img:'images/u_39.webp',phrase:'لا',color:'#8BC34A'},
+];
+
+const UR_STORIES=[
+  {title:'شیر اور چوہا',img:'images/urdu_story_1.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',
+   text:'ایک بار ایک شیر جنگل میں سو رہا تھا۔ ایک چوہا اس کے منہ پر سے گزرا۔ شیر جاگ گیا اور چوہے کو پکڑ لیا۔\n\nچوہے نے التجا کی۔ شیر نے رحم کھا کر اسے چھوڑ دیا۔\n\nکچھ دن بعد شیر جال میں پھنس گیا۔ چوہے نے رسی کو کاٹ کر شیر کو آزاد کر دیا۔\n\nسبق: کوئی بھی کسی کی مدد کر سکتا ہے، کتنا بھی چھوٹا ہو۔'},
+  {title:'لومڑی اور انگور',img:'images/urdu_story_2.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'ایک لومڑی کو بھوک لگی تھی۔ اس نے انگور کا ایک گچھا دیکھا جو بلند تاک پر لٹکا تھا۔\n\nلومڑی نے انگور تک پہنچنے کی بہت کوشش کی لیکن ناکام رہی۔\n\nآخرکار اس نے کہا۔ یہ انگور کھٹے ہیں۔ یہ میرے لیے نہیں ہیں۔\n\nسبق: جو چیز نہ مل سکے اسے برا مت کہو۔'},
+  {title:'ہوشیار خرگوش',img:'images/urdu_story_3.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',
+   text:'ایک جنگل میں ایک ظالم شیر تھا۔ جانوروں نے روزانہ ایک جانور بھیجنے کا فیصلہ کیا۔\n\nایک دن ایک ہوشیار خرگوش کی باری آئی۔ وہ دیر سے پہنچا۔ شیر نے پوچھا کیوں؟\n\nخرگوش نے کہا ایک اور شیر نے روکا۔ شیر نے حریف کو دیکھنا چاہا۔\n\nخرگوش نے شیر کو ایک گہرے کنوئیں کے پاس لے گیا۔ شیر نے اپنا عکس دیکھا اور کود پڑا۔\n\nسبق: عقل طاقت سے بڑی ہوتی ہے۔'},
+  {title:'پیاسا کوا',img:'images/urdu_story_5.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',
+   text:'گرمی کے دنوں میں ایک پیاسا کوا پانی کی تلاش میں اڑ رہا تھا۔\n\nاسے ایک گھڑا ملا جس میں تھوڑا پانی تھا۔ اس کی چونچ پانی تک نہیں پہنچ رہی تھی۔\n\nکوے نے قریب پتھر دیکھے اور ایک ایک کر کے گھڑے میں ڈالنے لگا۔ پانی اوپر آ گیا۔\n\nسبق: مشکل میں ہمت اور عقل سے کام لو۔'},
+  {title:'کچھوا اور خرگوش',img:'images/urdu_story_6.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',
+   text:'ایک خرگوش نے ایک کچھوے کو دوڑ کی چیلنج دی۔ خرگوش تیزی سے بھاگا اور راستے میں سو گیا۔\n\nکچھوا آہستہ آہستہ چلتا رہا اور منزل تک پہنچ گیا۔\n\nخرگوش جب جاگا تو کچھوا جیت چکا تھا۔\n\nسبق: آہستہ اور پکا کام آخر میں کامیاب ہوتا ہے۔'},
+  {title:'سونے کا انڈہ',img:'images/urdu_story_7.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FF9800',
+   text:'ایک کسان کے پاس ایک مرغی تھی جو روزانہ سونے کا انڈہ دیتی تھی۔\n\nکسان لالچی ہو گیا اور اس نے سوچا کہ مرغی کے پیٹ میں بہت سے انڈے ہوں گے۔\n\nاس نے مرغی کاٹ دی لیکن اندر کچھ نہیں تھا۔ اب وہ روزانہ کا انڈہ بھی گنوا بیٹھا۔\n\nسبق: لالچ بری بلا ہے۔'},
+  {title:'لکڑہارے کی کلہاڑی',img:'images/urdu_story_8.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',
+   text:'ایک لکڑہارے کی کلہاڑی دریا میں گر گئی۔ وہ رونے لگا۔\n\nایک پری نمودار ہوئی اور سونے کی کلہاڑی لائی۔ کیا یہ تمہاری ہے؟ لکڑہارے نے کہا نہیں۔\n\nپھر چاندی کی لائی۔ نہیں۔ پھر اس کی لوہے کی کلہاڑی لائی۔ ہاں یہ میری ہے۔\n\nپری نے اس کی ایمانداری سے خوش ہو کر تینوں کلہاڑیاں دے دیں۔\n\nسبق: ایمانداری بہترین پالیسی ہے۔'},
+  {title:'بھیڑیا اور بچہ',img:'images/urdu_story_9.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',
+   text:'ایک چرواہا بچہ مذاق میں بھیڑیا بھیڑیا چلاتا تھا۔ گاؤں والے دوڑے آتے لیکن کوئی بھیڑیا نہ ہوتا۔\n\nآخرکار سچ میں بھیڑیا آیا۔ بچے نے چلایا لیکن کوئی نہ آیا۔ اس نے اپنی پوری بھیڑیں کھو دیں۔\n\nسبق: ہمیشہ سچ بولو۔ جھوٹا پکارنے والے کو کوئی نہیں سنتا۔'},
+  {title:'اکبر اور بیربل',img:'images/urdu_story_10.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'اکبر بادشاہ نے بیربل سے پوچھا — دنیا میں سب سے بڑا ہتھیار کیا ہے؟\n\nبیربل نے کہا — حضور، ہمت اور عقل سب سے بڑا ہتھیار ہے۔\n\nاکبر نے آزمائش کی لیکن بیربل نے ہر مشکل اپنی عقل سے حل کی۔\n\nسبق: عقل اور ہمت ہر مشکل کا حل ہے۔'},
+];
+
+let urIdx=0,urPlaying=false;
+function urRender(dir){
+  const d=UR_ALPHA[urIdx];
+  const card=document.getElementById('ur-card');
+  card.querySelector('img').src=d.img;
+  document.getElementById('ur-letter').textContent=d.letter;
+  document.getElementById('ur-letter').style.color=d.color;
+  document.getElementById('ur-word').textContent=d.word;
+  document.getElementById('ur-hindi').textContent=d.hindi;
+  document.getElementById('ur-phrase').textContent=d.phrase;
+  document.getElementById('ur-counter').textContent=(urIdx+1)+' / '+UR_ALPHA.length;
+  const cls=dir>0?'slide-r':'slide-l';
+  card.classList.remove('slide-r','slide-l');void card.offsetWidth;card.classList.add(cls);
+  setTimeout(()=>card.classList.remove(cls),300);
+  Speech.stop();urPlaying=false;
+  const pb=document.getElementById('ur-play');pb.textContent='▶';pb.classList.remove('playing');
+}
+function urNext(){urIdx=(urIdx+1)%UR_ALPHA.length;urRender(1);Rewards.addStars(1);}
+function urPrev(){urIdx=(urIdx-1+UR_ALPHA.length)%UR_ALPHA.length;urRender(-1);Rewards.addStars(1);}
+function urPlayFn(){
+  const d=UR_ALPHA[urIdx];const pb=document.getElementById('ur-play');
+  if(urPlaying){Speech.stop();urPlaying=false;pb.textContent='▶';pb.classList.remove('playing');}
+  else{urPlaying=true;pb.textContent='⏸';pb.classList.add('playing');
+    Speech.speak(d.phrase,'ur-PK',0.9,()=>{urPlaying=false;pb.textContent='▶';pb.classList.remove('playing');});
+    Rewards.addStars(1);}
+}
+function buildUrduGrid(){
+  const el=document.getElementById('ur-grid');if(el.children.length) return;
+  UR_ALPHA.forEach(a=>{
+    const item=document.createElement('div');item.className='grid-item';
+    item.innerHTML=`<img src="${a.img}" alt="${a.word}" onerror="this.style.display='none'"><div class="grid-item-label" style="color:${a.color};font-family:'Noto Nastaliq Urdu',serif;font-size:0.9rem">${a.letter}</div>`;
+    item.onclick=()=>{Speech.speak(a.phrase,'ur-PK',0.9);Rewards.addStars(1);};
+    el.appendChild(item);
+  });
+}
+let urStoriesBuilt=false;
+function buildUrduStories(){
+  if(urStoriesBuilt) return;urStoriesBuilt=true;
+  const el=document.getElementById('ur-stories-wrap');
+  let activeBtn=null;
+  UR_STORIES.forEach(s=>{
+    const card=document.createElement('div');card.className='s-card';card.style.background=s.bg;
+    const tid='ut_'+Math.random().toString(36).slice(2,8);
+    card.innerHTML=`
+      <img src="${s.img}" alt="${s.title}" onerror="this.style.height='3px'">
+      <div class="s-body" style="direction:rtl;text-align:right">
+        <div class="s-badge">📖 اردو کہانی</div>
+        <div class="s-title" style="font-family:'Noto Nastaliq Urdu',serif">${s.title}</div>
+        <div class="s-text rtl" id="${tid}"></div>
+        <button class="s-btn" style="background:linear-gradient(135deg,${s.ac},${s.ac}99);direction:ltr"
+          data-text="${s.text.replace(/"/g,'&quot;')}" onclick="toggleUrStory(this)">🔊 سنیں</button>
+      </div>`;
+    el.appendChild(card);
+    const textEl=document.getElementById(tid);
+    textEl.textContent=s.text;
+  });
+}
+let urActiveBtn=null;
+function toggleUrStory(btn){
+  const text=btn.dataset.text;
+  if(urActiveBtn&&urActiveBtn!==btn){urActiveBtn.textContent='🔊 سنیں';urActiveBtn.classList.remove('playing');Speech.stop();}
+  if(Speech.isSpeaking()&&urActiveBtn===btn){Speech.stop();btn.textContent='🔊 سنیں';btn.classList.remove('playing');urActiveBtn=null;}
+  else{urActiveBtn=btn;btn.textContent='⏸ روکیں';btn.classList.add('playing');
+    Speech.speak(text,'ur-PK',0.9,()=>{btn.textContent='🔊 سنیں';btn.classList.remove('playing');if(urActiveBtn===btn)urActiveBtn=null;});
+    Rewards.addStars(3);}
+}
+urRender(1);
+const urCard=document.getElementById('ur-card');
+let usx=0;
+urCard.addEventListener('touchstart',e=>{usx=e.touches[0].clientX;},{passive:true});
+urCard.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-usx;if(Math.abs(dx)>40){if(dx<0)urNext();else urPrev();}},{passive:true});
+</script>
+</body>
+</html>

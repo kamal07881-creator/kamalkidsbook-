@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Math — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;900&family=Hind:wght@400;700&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-logo-icon{background:linear-gradient(135deg,#ee0979,#ff6a00)}
+.kk-tab.active{color:#ff6a00}
+</style>
+</head>
+<body>
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🔢</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Math</div>
+      <div class="brand-bot">NUMBERS & TABLES 🔢</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<div class="kk-tabs">
+  <button class="kk-tab active" onclick="switchTab('t0',this,'#ff6a00')">दृश्य 1-20</button>
+  <button class="kk-tab" onclick="switchTab('t1',this,'#ff6a00');buildCount()">1-100 गिनती</button>
+  <button class="kk-tab" onclick="switchTab('t_place',this,'#ff6a00');buildPlaceValue()">इकाई-दहाई (Place)</button>
+  <button class="kk-tab" onclick="switchTab('t2',this,'#ff6a00');buildGrid()">Grid</button>
+  <button class="kk-tab" onclick="switchTab('t3',this,'#ff6a00');buildTables()">पहाड़े</button>
+</div>
+
+<div id="t0" class="tab-pane active kk-main">
+  <div class="math-vis">
+    <div class="math-big-card" id="vis-card" onclick="visPlay()">
+      <div class="math-num" id="vis-num" style="color:#F44336">1</div>
+      <div class="math-name" id="vis-name">एक — One</div>
+      <div class="math-emojis" id="vis-emojis">🍎</div>
+      <button class="alpha-play" id="vis-btn" style="background:linear-gradient(135deg,#ee0979,#ff6a00);color:#fff;margin-top:8px" onclick="event.stopPropagation();visPlay()">▶</button>
+    </div>
+    <div class="math-vis-controls">
+      <button class="math-vis-btn" onclick="visMove(-1)">◀</button>
+      <span id="vis-counter" style="color:rgba(255,255,255,0.5);font-size:0.85rem">1 / 20</span>
+      <button class="math-vis-btn" onclick="visMove(1)">▶</button>
+    </div>
+  </div>
+</div>
+
+<div id="t1" class="tab-pane kk-main">
+  <div class="count-list" id="count-list"></div>
+</div>
+
+<div id="t_place" class="tab-pane kk-main">
+  <div class="place-wrap" id="place-wrap" style="padding:14px;max-width:600px;margin:0 auto"></div>
+</div>
+
+<div id="t2" class="tab-pane kk-main">
+  <div class="num-grid" id="num-grid"></div>
+</div>
+
+<div id="t3" class="tab-pane kk-main">
+  <div class="table-wrap" id="table-wrap"></div>
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const HINDI_NUMS=['','एक','दो','तीन','चार','पाँच','छह','सात','आठ','नौ','दस','ग्यारह','बारह','तेरह','चौदह','पंद्रह','सोलह','सत्रह','अठारह','उन्नीस','बीस','इक्कीस','बाईस','तेईस','चौबीस','पच्चीस','छब्बीस','सत्ताईस','अट्ठाईस','उनतीस','तीस','इकतीस','बत्तीस','तैंतीस','चौंतीस','पैंतीस','छत्तीस','सैंतीस','अड़तीस','उनतालीस','चालीस','इकतालीस','बयालीस','तैंतालीस','चौंतालीस','पैंतालीस','छियालीस','सैंतालीस','अड़तालीस','उनचास','पचास','इक्यावन','बावन','तिरपन','चौवन','पचपन','छप्पन','सत्तावन','अट्ठावन','उनसठ','साठ','इकसठ','बासठ','तिरसठ','चौंसठ','पैंसठ','छियासठ','सड़सठ','अड़सठ','उनहत्तर','सत्तर','इकहत्तर','बहत्तर','तिहत्तर','चौहत्तर','पचहत्तर','छिहत्तर','सतहत्तर','अठहत्तर','उन्यासी','अस्सी','इक्यासी','बयासी','तिरासी','चौरासी','पचासी','छियासी','सत्तासी','अट्ठासी','नवासी','नब्बे','इक्यानवे','बानवे','तिरानवे','चौरानवे','पचानवे','छियानवे','सत्तानवे','अट्ठानवे','निन्यानवे','सौ'];
+const COLORS=['#F44336','#E91E63','#9C27B0','#3F51B5','#2196F3','#00BCD4','#009688','#4CAF50','#8BC34A','#FFC107'];
+const EMOJIS=['🍎','🦋','⭐','🌸','✋','🐞','🌈','🎯','🌟','👐'];
+const VIS=[
+  {n:1,h:'एक',e:'One',em:'🍎',c:'#F44336'},{n:2,h:'दो',e:'Two',em:'🦋',c:'#E91E63'},
+  {n:3,h:'तीन',e:'Three',em:'⭐',c:'#9C27B0'},{n:4,h:'चार',e:'Four',em:'🌸',c:'#3F51B5'},
+  {n:5,h:'पाँच',e:'Five',em:'✋',c:'#2196F3'},{n:6,h:'छह',e:'Six',em:'🐞',c:'#00BCD4'},
+  {n:7,h:'सात',e:'Seven',em:'🌈',c:'#009688'},{n:8,h:'आठ',e:'Eight',em:'🎯',c:'#4CAF50'},
+  {n:9,h:'नौ',e:'Nine',em:'🌟',c:'#8BC34A'},{n:10,h:'दस',e:'Ten',em:'👐',c:'#FFC107'},
+  {n:11,h:'ग्यारह',e:'Eleven',em:'🍭',c:'#FF9800'},{n:12,h:'बारह',e:'Twelve',em:'📅',c:'#FF5722'},
+  {n:13,h:'तेरह',e:'Thirteen',em:'🍀',c:'#795548'},{n:14,h:'चौदह',e:'Fourteen',em:'🦜',c:'#607D8B'},
+  {n:15,h:'पंद्रह',e:'Fifteen',em:'🌻',c:'#F44336'},{n:16,h:'सोलह',e:'Sixteen',em:'🎨',c:'#9C27B0'},
+  {n:17,h:'सत्रह',e:'Seventeen',em:'🦅',c:'#2196F3'},{n:18,h:'अठारह',e:'Eighteen',em:'🍒',c:'#4CAF50'},
+  {n:19,h:'उन्नीस',e:'Nineteen',em:'💫',c:'#FFC107'},{n:20,h:'बीस',e:'Twenty',em:'🙌',c:'#FF9800'},
+];
+
+let visIdx=0,visPlaying=false;
+function visRender(idx){
+  visIdx=idx;const d=VIS[idx];
+  document.getElementById('vis-num').textContent=d.n;
+  document.getElementById('vis-num').style.color=d.c;
+  document.getElementById('vis-name').textContent=d.h+' — '+d.e;
+  let em='';for(let i=0;i<d.n;i++) em+=d.em+' ';
+  document.getElementById('vis-emojis').textContent=em.trim();
+  document.getElementById('vis-counter').textContent=(idx+1)+' / 20';
+  const btn=document.getElementById('vis-btn');
+  btn.textContent='▶';btn.classList.remove('playing');visPlaying=false;Speech.stop();
+}
+function visMove(dir){visIdx=(visIdx+dir+20)%20;visRender(visIdx);Rewards.addStars(1);}
+function visPlay(){
+  const d=VIS[visIdx];const btn=document.getElementById('vis-btn');
+  if(visPlaying){Speech.stop();visPlaying=false;btn.textContent='▶';btn.classList.remove('playing');}
+  else{visPlaying=true;btn.textContent='⏸';btn.classList.add('playing');
+    Speech.speak(d.n+' — '+d.e+' — '+d.h,'hi-IN',0.85,()=>{visPlaying=false;btn.textContent='▶';btn.classList.remove('playing');});
+    Rewards.addStars(1);}
+}
+
+function buildCount(){
+  const el=document.getElementById('count-list');if(el.children.length) return;
+  for(let i=1;i<=100;i++){
+    const div=document.createElement('div');div.className='count-item';
+    div.style.borderLeft='4px solid '+COLORS[(i-1)%10];
+    div.innerHTML='<div class="count-num" style="color:'+COLORS[(i-1)%10]+'">'+i+'</div><div class="count-name" style="font-family:\'Hind\',sans-serif">'+HINDI_NUMS[i]+'</div><span style="font-size:1.3rem">'+EMOJIS[(i-1)%10]+'</span>';
+    div.onclick=()=>{Speech.speak(i+' — '+HINDI_NUMS[i],'hi-IN',0.9);Rewards.addStars(1);};
+    el.appendChild(div);
+  }
+}
+
+function buildGrid(){
+  const el=document.getElementById('num-grid');if(el.children.length) return;
+  for(let i=1;i<=100;i++){
+    const btn=document.createElement('button');btn.className='num-cell';
+    btn.style.background='linear-gradient(145deg,'+COLORS[(i-1)%10]+','+COLORS[i%10]+')';
+    btn.textContent=i;
+    btn.onclick=()=>{btn.style.transform='scale(0.85)';setTimeout(()=>btn.style.transform='',200);
+      Speech.speak(i+' — '+HINDI_NUMS[i],'hi-IN',0.9);Rewards.addStars(1);};
+    el.appendChild(btn);
+  }
+}
+
+const PLACE_VALUES = [
+  {name:'इकाई', en:'Ones', val:'1', desc:'1 अंक', c:'#F44336'},
+  {name:'दहाई', en:'Tens', val:'10', desc:'2 अंक', c:'#2196F3'},
+  {name:'सैकड़ा', en:'Hundreds', val:'100', desc:'3 अंक', c:'#4CAF50'},
+  {name:'हज़ार', en:'Thousands', val:'1,000', desc:'4 अंक', c:'#FF9800'},
+  {name:'दस हज़ार', en:'Ten Thousands', val:'10,000', desc:'5 अंक', c:'#9C27B0'},
+  {name:'लाख', en:'Lakhs', val:'1,00,000', desc:'6 अंक', c:'#E91E63'},
+  {name:'दस लाख', en:'Ten Lakhs', val:'10,00,000', desc:'7 अंक', c:'#2196F3'},
+  {name:'करोड़', en:'Crore', val:'1,00,00,000', desc:'8 अंक', c:'#F44336'},
+  {name:'दस करोड़', en:'Ten Crore', val:'10,00,00,000', desc:'9 अंक', c:'#FF9800'},
+  {name:'अरब', en:'Arab (Billions)', val:'1,00,00,00,000', desc:'10 अंक', c:'#4CAF50'},
+  {name:'दस अरब', en:'Ten Arab', val:'10,00,00,00,000', desc:'11 अंक', c:'#9C27B0'},
+  {name:'खरब', en:'Kharab (Trillions)', val:'1,00,00,00,00,000', desc:'12 अंक', c:'#E91E63'},
+  {name:'दस खरब', en:'Ten Kharab', val:'10,00,00,00,00,000', desc:'13 अंक', c:'#2196F3'},
+  {name:'नील', en:'Neel', val:'1,00,00,00,00,00,000', desc:'14 अंक', c:'#F44336'},
+  {name:'दस नील', en:'Ten Neel', val:'10,00,00,00,00,00,000', desc:'15 अंक', c:'#FF9800'}
+];
+
+let curPlacePlaying = -1;
+
+function buildPlaceValue(){
+  const el = document.getElementById('place-wrap');
+  if(el.children.length) return;
+  PLACE_VALUES.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'place-card';
+    card.id = 'place_card_' + idx;
+    card.style.cssText = `
+      background:#fff;border-radius:20px;padding:16px 20px;margin-bottom:12px;
+      display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+      border:2px solid ${item.c}33;box-shadow:0 4px 14px rgba(0,0,0,0.06);transition:all 0.2s;
+    `;
+    card.innerHTML = `
+      <div>
+        <div style="font-size:1.45rem;font-weight:900;color:${item.c};font-family:'Hind',sans-serif">${item.name}</div>
+        <div style="font-size:0.85rem;font-weight:700;color:#64748b">${item.en}</div>
+        <div style="font-size:1.15rem;font-weight:900;color:#1e293b;margin-top:4px">${item.val}</div>
+        <div style="font-size:0.75rem;color:#94a3b8;font-weight:600">(${item.desc})</div>
+      </div>
+      <button id="place_btn_${idx}" style="
+        width:48px;height:48px;border-radius:50%;background:${item.c};color:#fff;
+        font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+        box-shadow:0 4px 12px ${item.c}66;transition:transform 0.15s;flex-shrink:0
+      ">▶</button>
+    `;
+    
+    const playThis = () => {
+      const btn = document.getElementById('place_btn_' + idx);
+      if(curPlacePlaying === idx){
+        Speech.stop();
+        curPlacePlaying = -1;
+        btn.textContent = '▶';
+        card.style.background = '#fff';
+      } else {
+        if(curPlacePlaying >= 0){
+          const prevBtn = document.getElementById('place_btn_' + curPlacePlaying);
+          const prevCard = document.getElementById('place_card_' + curPlacePlaying);
+          if(prevBtn) prevBtn.textContent = '▶';
+          if(prevCard) prevCard.style.background = '#fff';
+        }
+        Speech.stop();
+        curPlacePlaying = idx;
+        btn.textContent = '⏹';
+        card.style.background = item.c + '14';
+        Speech.speak(`${item.name}, ${item.en}, ${item.val}`, 'hi-IN', 0.88, () => {
+          btn.textContent = '▶';
+          card.style.background = '#fff';
+          if(curPlacePlaying === idx) curPlacePlaying = -1;
+        });
+        if(typeof Rewards !== 'undefined') Rewards.addStars(1);
+      }
+    };
+    
+    card.onclick = playThis;
+    card.querySelector('#place_btn_' + idx).onclick = (e) => { e.stopPropagation(); playThis(); };
+    el.appendChild(card);
+  });
+}
+
+const HINDI_MULT_SUFFIX = ['', 'एकम', 'दूनी', 'तिया', 'चौके', 'पंजे', 'छक्के', 'सत्ते', 'अठे', 'नम्मे', 'दहाई'];
+
+const ENGLISH_MULT_SUFFIX = ['', 'ones', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sevens', 'eights', 'nines', 'tens'];
+
+function buildTables(){
+  const el=document.getElementById('table-wrap');if(el.children.length) return;
+  for(let n=1;n<=20;n++){
+    const card=document.createElement('div');card.className='table-card';
+    const c=COLORS[(n-1)%10];
+    const head=document.createElement('div');head.className='table-head';
+    head.style.color=c;
+    head.style.display='flex';
+    head.style.alignItems='center';
+    head.style.justifyContent='space-between';
+    head.innerHTML=`
+      <span>${n} का पहाड़ा (Table of ${n})</span>
+      <button style="background:${c};color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 2px 8px rgba(0,0,0,0.3)" onclick="Speech.speak('Table of ${n}','en-US',0.9)">▶</button>
+    `;
+    card.appendChild(head);
+    for(let i=1;i<=10;i++){
+      const res = n * i;
+      const row=document.createElement('div');row.className='table-row';
+      const hiSuffix = HINDI_MULT_SUFFIX[i];
+      const enSuffix = ENGLISH_MULT_SUFFIX[i];
+      
+      row.innerHTML=`
+        <div class="table-row-text">${n} x ${i} = ${res}</div>
+        <div class="table-btns-row">
+          <button class="tbl-btn-hi" onclick="event.stopPropagation();playHindiLine(${n}, '${hiSuffix}', ${res})">हिन्दी</button>
+          <button class="tbl-btn-en" onclick="event.stopPropagation();playEnglishLine(${n}, '${enSuffix}', ${res})">English</button>
+        </div>
+      `;
+      row.onclick=()=>{
+        playHindiLine(n, hiSuffix, res);
+      };
+      card.appendChild(row);
+    }
+    el.appendChild(card);
+  }
+}
+
+function playHindiLine(n, suffix, res){
+  Speech.speak(`${n} ${suffix} ${res}`, 'hi-IN', 0.88);
+  if(typeof Rewards !== 'undefined') Rewards.addStars(1);
+}
+
+function playEnglishLine(n, suffix, res){
+  Speech.speak(`${n} ${suffix} are ${res}`, 'en-US', 0.9);
+  if(typeof Rewards !== 'undefined') Rewards.addStars(1);
+}
+
+visRender(0);
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('t0').classList.contains('active')){
+    if(e.key==='ArrowRight') visMove(1);
+    if(e.key==='ArrowLeft') visMove(-1);
+  }
+});
+</script>
+</body>
+</html>

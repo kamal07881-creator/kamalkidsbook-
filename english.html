@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>English — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;900&family=Hind:wght@400;700&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-logo-icon{background:linear-gradient(135deg,#FF5F6D,#FFC371)}
+.kk-tab.active{color:#FF5F6D}
+</style>
+</head>
+<body>
+
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🔤</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">English</div>
+      <div class="brand-bot">ABC COURSE 📚</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<div class="kk-tabs">
+  <button class="kk-tab active" onclick="switchTab('pane-abc',this,'#FF5F6D')">Alphabet A-Z</button>
+  <button class="kk-tab" onclick="switchTab('pane-en-practice',this,'#FF5F6D');buildEnPractice()">ABCD Practice</button>
+  <button class="kk-tab" onclick="switchTab('pane-grid',this,'#FF5F6D')">Grid View</button>
+  <button class="kk-tab" onclick="switchTab('pane-stories',this,'#FF5F6D');buildStories()">Stories 📖</button>
+</div>
+
+<!-- ABCD Practice Tab (App Exact: Capital Letters, Small Letters, Writing Practice) -->
+<div id="pane-en-practice" class="tab-pane kk-main">
+  <div class="en-practice-wrap" id="en-practice-wrap" style="padding:16px;max-width:600px;margin:0 auto"></div>
+</div>
+
+<!-- Alphabet Swipe View -->
+<div id="pane-abc" class="tab-pane active kk-main">
+  <div class="alpha-wrap">
+    <div class="alpha-card" id="en-card">
+      <div style="position:relative;width:100%;height:62%;overflow:hidden">
+        <img src="" alt="" id="en-img" style="width:100%;height:100%;object-fit:cover;display:block">
+        <div style="position:absolute;bottom:0;right:0;width:45%;height:18%;background:linear-gradient(135deg,transparent 0%,rgba(0,0,0,0.35) 100%);pointer-events:none"></div>
+      </div>
+      <div class="alpha-card-body">
+        <div class="alpha-letter" id="en-letter" style="color:#FF5F6D">A</div>
+        <div class="alpha-word" id="en-word">Apple</div>
+        <div class="alpha-hindi" id="en-hindi">सेब</div>
+        <div class="alpha-phrase" id="en-phrase">A for Apple</div>
+      </div>
+    </div>
+    <div class="alpha-controls">
+      <button class="alpha-btn" onclick="enCarousel.prev()">◀</button>
+      <button class="alpha-play" id="en-play" style="background:linear-gradient(135deg,#FF5F6D,#FFC371);color:#fff" onclick="enCarousel.play()">▶</button>
+      <button class="alpha-btn" onclick="enCarousel.next()">▶</button>
+    </div>
+    <div class="alpha-counter" id="en-counter" style="color:rgba(255,255,255,0.5);text-align:center;font-size:0.85rem;padding-bottom:8px">1 / 26</div>
+  </div>
+</div>
+
+<!-- Grid View -->
+<div id="pane-grid" class="tab-pane kk-main">
+  <div class="grid-wrap">
+    <div class="alpha-grid" id="en-grid"></div>
+  </div>
+</div>
+
+<!-- Stories -->
+<div id="pane-stories" class="tab-pane kk-main">
+  <div class="s-wrap" id="en-stories-wrap"></div>
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const EN_ALPHA = [
+  {letter:'A',word:'Apple',   hindi:'सेब',     img:'images/e_a.webp', phrase:'A for Apple',   color:'#F44336'},
+  {letter:'B',word:'Ball',    hindi:'गेंद',    img:'images/e_b.webp', phrase:'B for Ball',    color:'#E91E63'},
+  {letter:'C',word:'Cat',     hindi:'बिल्ली', img:'images/e_c.webp', phrase:'C for Cat',     color:'#9C27B0'},
+  {letter:'D',word:'Dog',     hindi:'कुत्ता', img:'images/e_d.webp', phrase:'D for Dog',     color:'#3F51B5'},
+  {letter:'E',word:'Elephant',hindi:'हाथी',   img:'images/e_e.webp', phrase:'E for Elephant',color:'#2196F3'},
+  {letter:'F',word:'Fish',    hindi:'मछली',   img:'images/e_f.webp', phrase:'F for Fish',    color:'#00BCD4'},
+  {letter:'G',word:'Grapes',  hindi:'अंगूर',  img:'images/e_g.webp', phrase:'G for Grapes',  color:'#009688'},
+  {letter:'H',word:'Hen',     hindi:'मुर्गी', img:'images/e_h.webp', phrase:'H for Hen',     color:'#4CAF50'},
+  {letter:'I',word:'Ice Cream',hindi:'आइसक्रीम',img:'images/e_i.webp',phrase:'I for Ice Cream',color:'#8BC34A'},
+  {letter:'J',word:'Jug',     hindi:'घड़ा',   img:'images/e_j.webp', phrase:'J for Jug',     color:'#FFC107'},
+  {letter:'K',word:'Kite',    hindi:'पतंग',   img:'images/e_k.webp', phrase:'K for Kite',    color:'#FF9800'},
+  {letter:'L',word:'Lion',    hindi:'शेर',    img:'images/e_l.webp', phrase:'L for Lion',    color:'#FF5722'},
+  {letter:'M',word:'Monkey',  hindi:'बंदर',   img:'images/e_m.webp', phrase:'M for Monkey',  color:'#795548'},
+  {letter:'N',word:'Nest',    hindi:'घोंसला', img:'images/e_n.webp', phrase:'N for Nest',    color:'#607D8B'},
+  {letter:'O',word:'Orange',  hindi:'संतरा',  img:'images/e_o.webp', phrase:'O for Orange',  color:'#F44336'},
+  {letter:'P',word:'Parrot',  hindi:'तोता',   img:'images/e_p.webp', phrase:'P for Parrot',  color:'#9C27B0'},
+  {letter:'Q',word:'Queen',   hindi:'रानी',   img:'images/e_q.webp', phrase:'Q for Queen',   color:'#2196F3'},
+  {letter:'R',word:'Rabbit',  hindi:'खरगोश', img:'images/e_r.webp', phrase:'R for Rabbit',  color:'#4CAF50'},
+  {letter:'S',word:'Sun',     hindi:'सूरज',   img:'images/e_s.webp', phrase:'S for Sun',     color:'#FFC107'},
+  {letter:'T',word:'Tiger',   hindi:'बाघ',    img:'images/e_t.webp', phrase:'T for Tiger',   color:'#FF9800'},
+  {letter:'U',word:'Umbrella',hindi:'छाता',   img:'images/e_u.webp', phrase:'U for Umbrella',color:'#E91E63'},
+  {letter:'V',word:'Van',     hindi:'वैन',    img:'images/e_v.webp', phrase:'V for Van',     color:'#3F51B5'},
+  {letter:'W',word:'Watch',   hindi:'घड़ी',   img:'images/e_w.webp', phrase:'W for Watch',   color:'#00BCD4'},
+  {letter:'X',word:'X-ray',   hindi:'एक्स-रे',img:'images/e_x.webp', phrase:'X for X-ray',   color:'#009688'},
+  {letter:'Y',word:'Yak',     hindi:'याक',    img:'images/e_y.webp', phrase:'Y for Yak',     color:'#8BC34A'},
+  {letter:'Z',word:'Zebra',   hindi:'ज़ेब्रा', img:'images/e_z.webp', phrase:'Z for Zebra',   color:'#FF5722'},
+];
+
+const EN_STORIES = [
+  {title:'The Lion and the Mouse',img:'images/e_story_1.webp',bg:'linear-gradient(145deg,#1a2040,#2d3060)',ac:'#2196F3',
+   text:'Once upon a time a mighty lion was sleeping in the forest. A tiny mouse accidentally ran across the lion\'s face. The lion woke up and caught the poor mouse.\n\nThe mouse begged — "Please great king, spare my life. One day I may help you!" The lion laughed but let the mouse go.\n\nDays later hunters trapped the lion in a net. The little mouse heard the roars, came running and gnawed through the ropes until the lion was free.\n\nMoral: Even the smallest friend can help. Never underestimate anyone.'},
+  {title:'The Clever Rabbit',img:'images/e_story_2.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'A cruel lion terrified all animals every day. One day a clever rabbit arrived very late. The angry lion roared — "Why so late?" The rabbit said — "Another lion claims to be the real king of this forest!"\n\nThe lion demanded to see this rival. The clever rabbit led the lion to a deep well. The lion looked down and saw his own reflection. Thinking it was the enemy he jumped in and never came out.\n\nMoral: Wisdom is always more powerful than brute strength.'},
+  {title:'The Greedy Dog',img:'images/e_story_3.webp',bg:'linear-gradient(145deg,#2d0a1a,#1a0610)',ac:'#E91E63',
+   text:'A hungry dog found a big juicy bone. While crossing a bridge he looked down into the water and saw his own reflection. The foolish dog thought it was another dog with a bigger bone.\n\nHe opened his mouth wide to bark and grab the other bone — his own bone fell into the river with a splash.\n\nMoral: Greed always leads to loss. Be happy with what you have.'},
+  {title:'The Tortoise and the Hare',img:'images/e_story_4.webp',bg:'linear-gradient(145deg,#0a1a2d,#061228)',ac:'#2196F3',
+   text:'A proud hare challenged a slow tortoise to a race. The hare shot ahead and decided to take a nap — the tortoise was so slow he had plenty of time.\n\nThe slow but steady tortoise kept walking step by step without stopping. When the hare finally woke up and ran to the finish line the tortoise had already crossed it.\n\nMoral: Slow and steady wins the race. Never give up.'},
+  {title:'The Boy Who Cried Wolf',img:'images/e_story_5.webp',bg:'linear-gradient(145deg,#1a1400,#281e00)',ac:'#FFC107',
+   text:'A young shepherd boy used to shout "Wolf! Wolf!" for fun. Villagers would run to help but find no wolf. He laughed every time.\n\nHe repeated this trick until the villagers stopped believing him. Then one terrible day a real wolf appeared and started attacking the sheep.\n\nThe terrified boy cried "Wolf!" but nobody came. He lost his entire flock that day.\n\nMoral: Always tell the truth. If you lie too often nobody will believe you.'},
+  {title:'The Boy Who Fell into the Water',img:'images/e_story_6.webp',bg:'linear-gradient(145deg,#1a2040,#2d3060)',ac:'#FF9800',
+   text:'A boy was playing near the river. Suddenly he slipped and fell into the river. A man was passing by. The boy shouted, "Help! Please pull me out!"\n\nAt first, the man just stood there and began telling the boy how foolish it was. But the boy kept shouting. Finally, the man threw a long stick and pulled him out safely.\n\nMoral: Be wise and make the right decisions!'},
+  {title:'Saving the Puppy',img:'images/e_story_8.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'One day a boy saw two children beating a puppy. He asked, "Why are you beating the puppy?" "We feel like it," they replied. "Give me the puppy," he said and offered his day\'s earnings.\n\nThe boy gave all his money to save the puppy. When he reached home he told his mother. "Son, you did well. We will go to bed hungry tonight for the sake of this puppy."\n\nMoral: Kindness and compassion are the greatest virtues.'},
+  {title:'The Teardrop',img:'images/e_story_10.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#9C27B0',
+   text:'A young man saw an old woman carrying a huge bundle of firewood. He offered to carry the load for her. The cunning witch gave the young man a pearl for his help.\n\nWhen he was about to leave he saw a young girl outside the witch\'s house. He rushed to the palace and showed the pearl to the king who recognised it as a teardrop of his kidnapped daughter.\n\nThe king sent soldiers to rescue the princess. The young man and princess fell in love and lived happily ever after.\n\nMoral: Good deeds are always rewarded.'},
+  {title:'The Elephant and Friends',img:'images/e_story_12.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'A lonely elephant sought friends in the forest but was rejected by others for being too big. The monkey said he was too big to swing trees. The rabbit said he was too large for his burrow.\n\nWhen danger came, the elephant helped all the animals by scaring away a lion. The animals then realized that true friendship comes in all shapes and sizes.\n\nMoral: Friends can be any shape or size.'},
+  {title:'The Eagle and the Woodcutter',img:'images/e_story_13.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',
+   text:'A woodcutter once found an eagle caught in a trap. Struck by the eagle\'s beauty, he set it free. Sometime later, the eagle swooped down and flew off with the woodcutter\'s hat!\n\nThe woodcutter chased the bird downhill. Just then, the rocks where he had been sitting gave way with a deafening noise. It was the same eagle repaying his favour!\n\nMoral: Kindness is always returned.'},
+  {title:'Thirsty Crow',img:'images/e_story_14.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',
+   text:'There was a crow which was very thirsty. He searched for water everywhere. At last he saw a water pot near a well but there was very little water inside.\n\nThe crow saw some stones nearby. He thought of a plan. He picked up the stones and put them one by one into the pot. The water level rose up. The crow drank the water and flew away happily.\n\nMoral: Where there is a will, there is a way.'},
+  {title:'A Good Boy',img:'images/e_story_16.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',
+   text:'It was Monday morning. Little Pedro got up. He made his bed. He took a bath. He put on clean clothes. He combed his hair.\n\nLittle Pedro ate his rice and fish, then brushed his teeth. He got his bag and said, "Goodbye, Mother! Goodbye, Father!"\n\nHe went to school happily and was the best student in his class.\n\nMoral: Good habits make a good life.'},
+  {title:'I Enjoy Reading',img:'images/e_story_18.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FF9800',
+   text:'I love to read! Reading is so much fun and helps me learn new things. I have many books at home, and I enjoy picking out my favorites to read.\n\nWhen I read, I can go on adventures to faraway places and meet new friends. I imagine myself as the characters in the books and explore their worlds.\n\nReading every day makes me smarter and happier!'},
+  {title:'Reading in the Park',img:'images/e_story_17.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',
+   text:'Sitting in the park with a good book is pure bliss. The sun shines, birds chirp, and I lose myself in the story. It\'s a peaceful escape from the hustle and bustle.\n\nEvery word on the page takes me to a different world. The park is my favorite place to read.'},
+  {title:'Reading Story Books',img:'images/e_story_15.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'Reading story books is a fantastic adventure! I love to pick up a colorful book and explore the pages. The characters come to life, and I go on exciting journeys.\n\nIn the world of storybooks, there are brave knights, funny animals, and magical places. I learn new words and discover interesting things with each turn of the page.'},
+];
+
+// Build Grid
+function buildGrid() {
+  const el = document.getElementById('en-grid');
+  if (el.children.length) return;
+  EN_ALPHA.forEach(a => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.innerHTML = `<img src="${a.img}" alt="${a.word}" onerror="this.style.display='none'"><div class="grid-item-label" style="color:${a.color}">${a.letter} - ${a.word}</div>`;
+    item.onclick = () => { Speech.speak(a.phrase, 'en-US', 0.9); Rewards.addStars(1); };
+    el.appendChild(item);
+  });
+}
+
+// Build Stories
+let storiesBuilt = false;
+function buildStories() {
+  if (storiesBuilt) return; storiesBuilt = true;
+  const el = document.getElementById('en-stories-wrap');
+  let activeBtn = null;
+  EN_STORIES.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 's-card';
+    card.style.background = s.bg;
+    const tid = 'et_' + s.title.replace(/\W/g,'_').slice(0,16);
+    card.innerHTML = `
+      <img src="${s.img}" alt="${s.title}" onerror="this.style.height='3px'">
+      <div class="s-body">
+        <div class="s-badge">📖 English Story</div>
+        <div class="s-title">${s.title}</div>
+        <div class="s-text" id="${tid}"></div>
+        <button class="s-btn" style="background:linear-gradient(135deg,${s.ac},${s.ac}99)" onclick="toggleStory(this,'${s.title.replace(/'/g,"\\'")}')">🔊 Listen Story</button>
+      </div>`;
+    el.appendChild(card);
+    buildWords(s.text, 'en-US', document.getElementById(tid));
+  });
+  window._enStories = EN_STORIES;
+  window._enActiveBtn = null;
+}
+
+function toggleStory(btn, title) {
+  const s = (window._enStories||EN_STORIES).find(x => x.title === title);
+  if (!s) return;
+  if (window._enActiveBtn && window._enActiveBtn !== btn) {
+    window._enActiveBtn.textContent = '🔊 Listen Story';
+    window._enActiveBtn.classList.remove('playing');
+    Speech.stop();
+  }
+  if (Speech.isSpeaking() && window._enActiveBtn === btn) {
+    Speech.stop(); btn.textContent = '🔊 Listen Story'; btn.classList.remove('playing'); window._enActiveBtn = null;
+  } else {
+    window._enActiveBtn = btn; btn.textContent = '⏸ Stop'; btn.classList.add('playing');
+    Speech.speak(s.text, 'en-US', 0.9, () => { btn.textContent = '🔊 Listen Story'; btn.classList.remove('playing'); if(window._enActiveBtn===btn) window._enActiveBtn=null; });
+    Rewards.addStars(3);
+  }
+}
+
+// Carousel
+const enCarousel = AlphaCarousel(EN_ALPHA, 'en-card', 'en-counter', 'en-play', 'en-US', '#FF5F6D');
+
+// Override render to update img separately
+document.getElementById('en-card').querySelector('img').src = EN_ALPHA[0].img;
+
+// Arrow keys
+document.addEventListener('keydown', e => {
+  if (document.getElementById('pane-abc').classList.contains('active')) {
+    if (e.key === 'ArrowRight') enCarousel.next();
+    if (e.key === 'ArrowLeft') enCarousel.prev();
+  }
+});
+
+const EN_PRACTICE_ITEMS = [
+  {
+    title: 'CAPITAL LETTERS',
+    sub: 'Capital ABC (A to Z)',
+    content: 'A  B  C  D  E  F  G\nH  I  J  K  L  M  N\nO  P  Q  R  S  T  U\nV  W  X  Y  Z',
+    color: '#FF5F6D',
+    speechText: 'A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z'
+  },
+  {
+    title: 'SMALL LETTERS',
+    sub: 'Small abc (a to z)',
+    content: 'a  b  c  d  e  f  g\nh  i  j  k  l  m  n\no  p  q  r  s  t  u\nv  w  x  y  z',
+    color: '#2196F3',
+    speechText: 'a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z'
+  },
+  {
+    title: 'CAPITAL & SMALL PAIRS',
+    sub: 'Both Letters Together',
+    content: 'Aa  Bb  Cc  Dd  Ee  Ff  Gg\nHh  Ii  Jj  Kk  Ll  Mm  Nn\nOo  Pp  Qq  Rr  Ss  Tt  Uu\nVv  Ww  Xx  Yy  Zz',
+    color: '#4CAF50',
+    speechText: 'Capital A small a, Capital B small b, Capital C small c, Capital D small d, Capital E small e, Capital F small f, Capital G small g'
+  },
+  {
+    title: 'VOWELS & CONSONANTS',
+    sub: 'English Phonics Guide',
+    content: '⭐ Vowels (5):\nA   E   I   O   U\n\n📌 Consonants (21):\nB C D F G H J K L M\nN P Q R S T V W X Y Z',
+    color: '#9C27B0',
+    speechText: 'Vowels are: A, E, I, O, U. All other 21 letters are Consonants.'
+  }
+];
+
+let curEnPracticePlaying = -1;
+
+function buildEnPractice(){
+  const el = document.getElementById('en-practice-wrap');
+  if(el.children.length) return;
+  EN_PRACTICE_ITEMS.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.id = 'en_practice_card_' + idx;
+    card.style.cssText = `
+      background:#fff;border-radius:24px;padding:22px;margin-bottom:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.07);border:2px solid ${item.color}33;
+      transition:transform 0.2s, background 0.2s;
+    `;
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div>
+          <span style="background:${item.color}18;color:${item.color};font-weight:900;padding:4px 12px;border-radius:12px;font-size:0.8rem;letter-spacing:0.5px">${item.title}</span>
+          <div style="font-size:1.15rem;font-weight:900;color:#1e293b;margin-top:6px">${item.sub}</div>
+        </div>
+        <button id="en_practice_btn_${idx}" style="
+          width:48px;height:48px;border-radius:50%;background:${item.color};color:#fff;
+          font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+          box-shadow:0 4px 12px ${item.color}66;cursor:pointer;border:none;flex-shrink:0
+        ">▶</button>
+      </div>
+      <div style="
+        background:#F8FAFC;border-radius:16px;padding:16px;font-size:1.4rem;font-weight:900;
+        color:#0f172a;line-height:2.1;white-space:pre-line;text-align:center;
+        letter-spacing:3px;border:1px solid #E2E8F0
+      ">${item.content}</div>
+    `;
+
+    const playFn = () => {
+      const btn = document.getElementById('en_practice_btn_' + idx);
+      if(curEnPracticePlaying === idx){
+        Speech.stop();
+        curEnPracticePlaying = -1;
+        btn.textContent = '▶';
+        card.style.background = '#fff';
+      } else {
+        if(curEnPracticePlaying >= 0){
+          const prevBtn = document.getElementById('en_practice_btn_' + curEnPracticePlaying);
+          const prevCard = document.getElementById('en_practice_card_' + curEnPracticePlaying);
+          if(prevBtn) prevBtn.textContent = '▶';
+          if(prevCard) prevCard.style.background = '#fff';
+        }
+        Speech.stop();
+        curEnPracticePlaying = idx;
+        btn.textContent = '⏹';
+        card.style.background = item.color + '10';
+        Speech.speak(item.speechText, 'en-US', 0.88, () => {
+          btn.textContent = '▶';
+          card.style.background = '#fff';
+          if(curEnPracticePlaying === idx) curEnPracticePlaying = -1;
+        });
+        if(typeof Rewards !== 'undefined') Rewards.addStars(1);
+      }
+    };
+
+    card.onclick = playFn;
+    card.querySelector('#en_practice_btn_' + idx).onclick = (e) => { e.stopPropagation(); playFn(); };
+    el.appendChild(card);
+  });
+}
+
+// Build grid when tab clicked
+document.querySelectorAll('.kk-tab')[2].addEventListener('click', buildGrid);
+</script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>My Profile — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#F8F9FF;--purple:#7C3AED;--orange:#FF6B35;--blue:#2196F3;--green:#22C55E;--red:#EF4444}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:#1a1a2e;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+
+/* Header */
+.kk-header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:60px;
+  background:rgba(248,249,255,0.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(124,58,237,0.15);
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+.kk-logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:42px;height:42px;border-radius:14px;
+  background:linear-gradient(135deg,#7C3AED,#4F46E5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;box-shadow:0 4px 14px rgba(124,58,237,0.4);
+}
+.logo-text .lt{font-size:1.1rem;font-weight:800;color:#1a1a2e;line-height:1}
+.logo-text .lb{font-size:0.6rem;color:#7C3AED;font-weight:700;line-height:1;margin-top:2px}
+.hdr-back{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:8px 14px;font-size:0.82rem;font-weight:700;color:#7C3AED}
+.hdr-back:hover{background:rgba(124,58,237,0.18)}
+
+/* Bottom Nav */
+.kk-bnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  display:flex;background:rgba(255,255,255,0.98);backdrop-filter:blur(16px);
+  border-top:1px solid rgba(0,0,0,0.08);height:64px;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+}
+.kk-bnav a{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:0.58rem;font-weight:700;color:rgba(0,0,0,0.4);gap:3px;transition:color 0.2s;
+}
+.kk-bnav a.active,.kk-bnav a:hover{color:#7C3AED}
+.nb-icon{font-size:1.3rem;line-height:1}
+
+/* Main content */
+.profile-wrap{
+  padding:20px 16px 90px;max-width:500px;margin:0 auto;
+}
+
+/* Profile Avatar Section */
+.avatar-section{
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 0 20px;
+}
+.avatar-ring{
+  position:relative;width:120px;height:120px;cursor:pointer;
+}
+.avatar-circle{
+  width:120px;height:120px;border-radius:50%;
+  border:3px solid #7C3AED;
+  background:rgba(124,58,237,0.1);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;font-size:4rem;
+  box-shadow:0 8px 28px rgba(124,58,237,0.25);
+  transition:transform 0.2s;
+}
+.avatar-circle:active{transform:scale(0.95)}
+.avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avatar-cam{
+  position:absolute;bottom:4px;right:4px;
+  width:36px;height:36px;border-radius:50%;
+  background:#7C3AED;border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+.avatar-name{
+  margin-top:14px;font-size:1.4rem;font-weight:800;color:#1a1a2e;
+  min-height:28px;
+}
+.remove-photo-btn{
+  margin-top:6px;background:none;color:var(--red);
+  font-size:0.82rem;font-weight:600;padding:4px 10px;
+  border-radius:8px;display:none;
+}
+.remove-photo-btn:hover{background:rgba(239,68,68,0.08)}
+
+/* Cards */
+.prof-card{
+  background:#fff;border-radius:24px;padding:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.07);
+  border:1px solid rgba(0,0,0,0.05);
+  margin-bottom:16px;
+}
+
+/* Name Input */
+.name-label{font-size:0.78rem;font-weight:700;color:#888;margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase}
+.name-input-row{display:flex;gap:10px;align-items:center}
+.name-input{
+  flex:1;padding:14px 16px;border-radius:16px;
+  border:2px solid rgba(124,58,237,0.2);
+  background:#F8F9FF;font-size:1rem;font-weight:600;
+  font-family:'Poppins',sans-serif;color:#1a1a2e;
+  transition:border-color 0.2s;outline:none;
+}
+.name-input:focus{border-color:#7C3AED;background:#fff}
+.save-btn{
+  padding:14px 20px;border-radius:16px;
+  background:linear-gradient(135deg,#7C3AED,#4F46E5);
+  color:#fff;font-weight:800;font-size:0.9rem;
+  box-shadow:0 4px 14px rgba(124,58,237,0.4);
+  transition:transform 0.15s,box-shadow 0.15s;
+  white-space:nowrap;
+}
+.save-btn:active{transform:scale(0.96);box-shadow:0 2px 8px rgba(124,58,237,0.3)}
+
+/* Stats Card */
+.stats-card{
+  background:linear-gradient(135deg,#7C3AED,#4F46E5);
+  border-radius:24px;padding:20px;
+  box-shadow:0 8px 28px rgba(124,58,237,0.35);
+  margin-bottom:16px;
+}
+.stats-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.active-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.2);border-radius:10px;
+  padding:5px 10px;font-size:0.75rem;font-weight:700;color:#fff;
+}
+.active-dot{width:8px;height:8px;border-radius:50%;background:#38EF7D;flex-shrink:0}
+.streak-text{font-size:0.85rem;font-weight:800;color:#FFD93D}
+.stats-grid{display:flex;justify-content:space-around}
+.stat-item{text-align:center}
+.stat-val{font-size:1.4rem;font-weight:900;color:#fff;line-height:1}
+.stat-lbl{font-size:0.72rem;color:rgba(255,255,255,0.75);margin-top:3px;font-weight:600}
+
+/* Reminder Card */
+.reminder-head{display:flex;align-items:center;justify-content:space-between}
+.reminder-label-row{display:flex;align-items:center;gap:10px}
+.reminder-icon{font-size:1.4rem}
+.reminder-title{font-size:1rem;font-weight:800;color:#1a1a2e}
+/* Toggle Switch */
+.toggle-wrap{position:relative;width:52px;height:28px;flex-shrink:0}
+.toggle-wrap input{opacity:0;width:0;height:0}
+.toggle-slider{
+  position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;
+  background:#ccc;border-radius:34px;transition:0.3s;
+}
+.toggle-slider:before{
+  position:absolute;content:"";height:22px;width:22px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;transition:0.3s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+input:checked+.toggle-slider{background:var(--orange)}
+input:checked+.toggle-slider:before{transform:translateX(24px)}
+.reminder-body{margin-top:16px;display:none}
+.reminder-body.show{display:block}
+.reminder-subtitle{font-size:0.78rem;font-weight:700;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+.time-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;background:#F8F9FF;border-radius:14px;
+  margin-bottom:8px;border:1px solid rgba(255,107,53,0.2);
+}
+.time-item-left{display:flex;align-items:center;gap:10px;font-weight:700;color:#1a1a2e;font-size:0.95rem}
+.time-del{background:none;color:var(--red);font-size:1.1rem;padding:4px;border-radius:8px}
+.time-del:hover{background:rgba(239,68,68,0.08)}
+.add-time-btn{
+  width:100%;padding:12px;border-radius:14px;
+  border:2px dashed rgba(124,58,237,0.3);
+  background:rgba(124,58,237,0.04);
+  color:#7C3AED;font-weight:700;font-size:0.9rem;
+  transition:all 0.2s;margin-top:4px;
+}
+.add-time-btn:hover{border-color:#7C3AED;background:rgba(124,58,237,0.08)}
+
+/* Privacy Card */
+.privacy-card{
+  background:#fff;border-radius:24px;padding:18px 20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.07);
+  border:1px solid rgba(0,0,0,0.05);
+  margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:transform 0.15s;text-decoration:none;
+}
+.privacy-card:hover{transform:translateY(-2px)}
+.privacy-left{display:flex;align-items:center;gap:12px}
+.privacy-icon{font-size:1.5rem}
+.privacy-title{font-size:1rem;font-weight:800;color:#1a1a2e}
+.privacy-sub{font-size:0.75rem;color:#888;font-weight:500}
+.privacy-arr{font-size:0.9rem;font-weight:800;color:#7C3AED}
+
+/* Age Calculator Banner */
+.age-banner{
+  background:linear-gradient(135deg,#FF6B35,#F7C59F);
+  border-radius:24px;padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;cursor:pointer;text-decoration:none;
+  box-shadow:0 6px 20px rgba(255,107,53,0.3);
+  transition:transform 0.15s;
+}
+.age-banner:hover{transform:translateY(-2px)}
+.age-banner-left h3{font-size:1rem;font-weight:800;color:#fff}
+.age-banner-left p{font-size:0.78rem;color:rgba(255,255,255,0.85);margin-top:2px}
+.age-banner-emoji{font-size:2.5rem}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(30,30,60,0.95);color:#fff;padding:10px 22px;border-radius:50px;
+  font-size:0.85rem;font-weight:700;white-space:nowrap;
+  opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Hidden file input */
+#photo-input{display:none}
+
+/* Divider */
+.section-title{font-size:0.72rem;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:1px;margin:6px 0 10px}
+</style>
+</head>
+<body>
+
+<header class="kk-header">
+  <div class="kk-logo">
+    <div class="logo-icon">👤</div>
+    <div class="logo-text">
+      <div class="lt">My Profile</div>
+      <div class="lb">KAMAL KIDS BOOK</div>
+    </div>
+  </div>
+  <a href="index.html" class="hdr-back">← Home</a>
+</header>
+
+<input type="file" id="photo-input" accept="image/*" onchange="handlePhotoChange(this)">
+
+<div class="profile-wrap">
+
+  <!-- Avatar Section -->
+  <div class="avatar-section">
+    <div class="avatar-ring" onclick="document.getElementById('photo-input').click()">
+      <div class="avatar-circle" id="avatar-circle">
+        <span id="avatar-emoji">👤</span>
+        <img id="avatar-img" src="" alt="" style="display:none">
+      </div>
+      <div class="avatar-cam">📷</div>
+    </div>
+    <div class="avatar-name" id="avatar-name">My Name</div>
+    <button class="remove-photo-btn" id="remove-photo-btn" onclick="removePhoto()">🗑️ Remove Photo</button>
+  </div>
+
+  <!-- Name Card -->
+  <div class="prof-card">
+    <div class="name-label">✏️ Your Name</div>
+    <div class="name-input-row">
+      <input type="text" class="name-input" id="name-input" placeholder="Enter your name..." maxlength="30">
+      <button class="save-btn" onclick="saveName()">💾 Save</button>
+    </div>
+  </div>
+
+  <!-- Stats Card -->
+  <div class="stats-card">
+    <div class="stats-top-row">
+      <div class="active-badge">
+        <div class="active-dot"></div>
+        Kamal Kids ✅
+      </div>
+      <div class="streak-text" id="streak-text">🔥 0 Day Streak</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-val" id="stat-stars">🌟 0</div>
+        <div class="stat-lbl">Stars</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-diamonds">💎 0</div>
+        <div class="stat-lbl">Diamonds</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-badges">🏅 0</div>
+        <div class="stat-lbl">Badges</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Age Calculator Banner -->
+  <a href="age-calculator.html" class="age-banner">
+    <div class="age-banner-left">
+      <h3>🎂 Age Calculator</h3>
+      <p>Calculate your exact age in seconds!</p>
+    </div>
+    <div class="age-banner-emoji">⏱️</div>
+  </a>
+
+  <!-- Study Reminder Card -->
+  <div class="prof-card">
+    <div class="reminder-head">
+      <div class="reminder-label-row">
+        <span class="reminder-icon">🔔</span>
+        <span class="reminder-title">Study Reminder</span>
+      </div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="reminder-toggle" onchange="toggleReminder(this)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="reminder-body" id="reminder-body">
+      <div class="reminder-subtitle" style="margin-top:14px">Reminder Schedule / टाइम टेबल:</div>
+      <div id="time-list"></div>
+      <button class="add-time-btn" onclick="addTime()">+ Add Time / नया समय जोड़ें</button>
+    </div>
+  </div>
+
+  <!-- Privacy Policy -->
+  <a href="https://sites.google.com/view/kamaltechskills/home" target="_blank" class="privacy-card">
+    <div class="privacy-left">
+      <span class="privacy-icon">🛡️</span>
+      <div>
+        <div class="privacy-title">Privacy Policy</div>
+        <div class="privacy-sub">Read our data policy</div>
+      </div>
+    </div>
+    <span class="privacy-arr">Read ›</span>
+  </a>
+
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html" class="active"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── LocalStorage Keys ──
+const LS_KEY  = 'kkb_rewards';
+const LS_PROF = 'kkb_profile';
+
+function getRewards(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY))||{stars:0,diamonds:0,badges:[]}; }
+  catch(e){ return {stars:0,diamonds:0,badges:[]}; }
+}
+function getProfile(){
+  try{ return JSON.parse(localStorage.getItem(LS_PROF))||{name:'',photo:'',reminder:false,times:[],lastVisit:'',streak:0}; }
+  catch(e){ return {name:'',photo:'',reminder:false,times:[],lastVisit:'',streak:0}; }
+}
+function saveProfile(p){ localStorage.setItem(LS_PROF, JSON.stringify(p)); }
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── Streak ──
+function updateStreak(){
+  const p=getProfile();
+  const today=new Date().toDateString();
+  if(p.lastVisit!==today){
+    const yesterday=new Date(Date.now()-86400000).toDateString();
+    p.streak = p.lastVisit===yesterday ? (p.streak||0)+1 : 1;
+    p.lastVisit=today;
+    saveProfile(p);
+  }
+  return p.streak||1;
+}
+
+// ── Init Page ──
+function initPage(){
+  const p=getProfile();
+  const r=getRewards();
+
+  // Name
+  document.getElementById('name-input').value = p.name||'';
+  document.getElementById('avatar-name').textContent = p.name||'My Name';
+
+  // Photo
+  if(p.photo){
+    showPhoto(p.photo);
+  }
+
+  // Stats
+  const streak=updateStreak();
+  document.getElementById('streak-text').textContent=`🔥 ${streak} Day Streak`;
+  document.getElementById('stat-stars').textContent=`🌟 ${r.stars||0}`;
+  document.getElementById('stat-diamonds').textContent=`💎 ${r.diamonds||0}`;
+  document.getElementById('stat-badges').textContent=`🏅 ${(r.badges||[]).length}`;
+
+  // Reminder
+  document.getElementById('reminder-toggle').checked = !!p.reminder;
+  if(p.reminder) document.getElementById('reminder-body').classList.add('show');
+  renderTimes();
+}
+
+// ── Photo ──
+function handlePhotoChange(input){
+  if(!input.files||!input.files[0]) return;
+  const file=input.files[0];
+  if(file.size > 5*1024*1024){ showToast('⚠️ Image too large (max 5MB)'); return; }
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const b64=e.target.result;
+    const p=getProfile(); p.photo=b64; saveProfile(p);
+    showPhoto(b64);
+    showToast('📸 Photo saved!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function showPhoto(b64){
+  const img=document.getElementById('avatar-img');
+  const em=document.getElementById('avatar-emoji');
+  const rb=document.getElementById('remove-photo-btn');
+  img.src=b64; img.style.display='block'; em.style.display='none';
+  rb.style.display='inline-block';
+}
+
+function removePhoto(){
+  const p=getProfile(); p.photo=''; saveProfile(p);
+  const img=document.getElementById('avatar-img');
+  const em=document.getElementById('avatar-emoji');
+  const rb=document.getElementById('remove-photo-btn');
+  img.src=''; img.style.display='none'; em.style.display='block';
+  rb.style.display='none';
+  document.getElementById('photo-input').value='';
+  showToast('🗑️ Photo removed!');
+}
+
+// ── Name ──
+function saveName(){
+  const val=document.getElementById('name-input').value.trim();
+  if(!val){ showToast('⚠️ Please enter a name'); return; }
+  const p=getProfile(); p.name=val; saveProfile(p);
+  document.getElementById('avatar-name').textContent=val;
+  showToast('✅ Name saved!');
+}
+
+// ── Reminder ──
+function toggleReminder(chk){
+  const p=getProfile(); p.reminder=chk.checked; saveProfile(p);
+  const body=document.getElementById('reminder-body');
+  if(chk.checked){ body.classList.add('show'); showToast('🔔 Reminder enabled!'); }
+  else { body.classList.remove('show'); showToast('🔕 Reminder disabled'); }
+}
+
+function renderTimes(){
+  const p=getProfile();
+  const el=document.getElementById('time-list');
+  el.innerHTML='';
+  (p.times||[]).forEach((t,i)=>{
+    const row=document.createElement('div'); row.className='time-item';
+    row.innerHTML=`<div class="time-item-left">⏰ ${formatTime(t)}</div>
+      <button class="time-del" onclick="deleteTime(${i})">🗑️</button>`;
+    el.appendChild(row);
+  });
+}
+
+function addTime(){
+  const h=prompt('Enter hour (0-23):','8');
+  if(h===null) return;
+  const m=prompt('Enter minutes (0-59):','0');
+  if(m===null) return;
+  const hh=parseInt(h); const mm=parseInt(m);
+  if(isNaN(hh)||hh<0||hh>23||isNaN(mm)||mm<0||mm>59){ showToast('⚠️ Invalid time'); return; }
+  const p=getProfile();
+  if(!p.times) p.times=[];
+  const str=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+  if(p.times.includes(str)){ showToast('⚠️ Time already added'); return; }
+  p.times.push(str); p.times.sort(); saveProfile(p);
+  renderTimes(); showToast(`✅ Reminder added at ${formatTime(str)}!`);
+}
+
+function deleteTime(idx){
+  const p=getProfile();
+  p.times.splice(idx,1); saveProfile(p);
+  renderTimes(); showToast('🗑️ Time removed!');
+}
+
+function formatTime(str){
+  try{
+    const [hh,mm]=str.split(':').map(Number);
+    const ampm=hh>=12?'PM':'AM';
+    const h12=hh%12||12;
+    return `${h12}:${String(mm).padStart(2,'0')} ${ampm}`;
+  }catch(e){ return str; }
+}
+
+// ── Enter key to save name ──
+document.getElementById('name-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter') saveName();
+});
+
+initPage();
+</script>
+</body>
+</html>

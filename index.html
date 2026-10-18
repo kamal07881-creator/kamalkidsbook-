@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Kamal Kids Book 📚</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;900&family=Hind:wght@400;600;700;800&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* App exact styles */
+.splash{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(145deg,#1a2a4a,#101828);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  transition:opacity 0.5s,visibility 0.5s;
+}
+.splash.hidden{opacity:0;visibility:hidden}
+.splash-icon{font-size:5rem;animation:bounce 0.8s ease infinite alternate}
+.splash-title{font-size:2rem;font-weight:900;color:#fff;text-align:center}
+.splash-sub{font-size:0.9rem;color:rgba(255,255,255,0.6)}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+
+/* App Hero Card */
+.hero-card{
+  border-radius:32px;
+  background:linear-gradient(135deg,#5B1DA3 0%,#8E2DE2 50%,#F2994A 100%);
+  padding:20px;
+  box-shadow:0 12px 36px rgba(91,29,163,0.4);
+  margin-bottom:16px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.hero-top-row{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.hero-user{
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+}
+.hero-avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:#FFD93D;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;font-size:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink:0;
+}
+.hero-avatar img{width:100%;height:100%;object-fit:cover;display:none}
+.hero-user-name{font-size:1.05rem;font-weight:900;line-height:1.2}
+.online-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(0,0,0,0.35);padding:3px 8px;border-radius:10px;
+  font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.9);margin-top:2px;
+}
+.online-dot{width:6px;height:6px;border-radius:50%;background:#38EF7D}
+.streak-chip{
+  background:rgba(255,255,255,0.22);backdrop-filter:blur(6px);
+  padding:6px 12px;border-radius:16px;font-size:0.8rem;font-weight:800;
+  display:flex;align-items:center;gap:5px;
+}
+
+.hero-tagline{
+  color:#FFD93D;font-size:0.82rem;font-weight:800;margin-top:16px;letter-spacing:0.4px;
+}
+.hero-big-title{
+  font-size:1.35rem;font-weight:900;line-height:1.3;margin-top:4px;
+  font-family:'Hind',sans-serif;
+}
+
+.hero-badges-scroll{
+  display:flex;gap:10px;margin-top:16px;overflow-x:auto;scrollbar-width:none;
+}
+.hero-badges-scroll::-webkit-scrollbar{display:none}
+.hero-stat-badge{
+  background:rgba(0,0,0,0.32);border-radius:18px;padding:8px 14px;
+  text-align:center;min-width:68px;flex-shrink:0;
+}
+.hero-stat-badge .emoji{font-size:1.4rem;line-height:1}
+.hero-stat-badge .lbl{font-size:0.68rem;color:rgba(255,255,255,0.85);font-weight:700;margin-top:2px}
+.hero-stat-badge .val{font-size:0.95rem;font-weight:900;color:#fff;margin-top:1px}
+
+/* Age Calculator Banner Card */
+.age-banner-card{
+  border-radius:28px;
+  background:linear-gradient(135deg,#EE0979 0%,#FF6A00 50%,#FFD200 100%);
+  padding:18px 20px;
+  box-shadow:0 8px 28px rgba(238,9,121,0.35);
+  margin-bottom:18px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;text-decoration:none;transition:transform 0.15s;
+}
+.age-banner-card:active{transform:scale(0.98)}
+.age-banner-left{display:flex;align-items:center;gap:14px;flex:1}
+.age-banner-circle{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;flex-shrink:0;
+}
+.age-banner-title{
+  font-size:1.1rem;font-weight:900;color:#fff;line-height:1.2;font-family:'Hind',sans-serif;
+}
+.age-banner-sub{
+  font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.95);margin-top:2px;font-family:'Hind',sans-serif;
+}
+.age-open-btn{
+  background:#fff;color:#EE0979;font-weight:900;font-size:0.75rem;
+  padding:8px 14px;border-radius:20px;white-space:nowrap;letter-spacing:0.5px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Category header */
+.category-heading{
+  display:flex;align-items:center;gap:8px;font-size:1.15rem;
+  font-weight:900;color:#fff;margin-bottom:14px;font-family:'Hind',sans-serif;
+}
+
+/* 3-item Bottom Nav for App parity (Home, Awards, Profile) + Quick bar */
+.kk-bnav a.active{color:#FF6B35}
+</style>
+</head>
+<body>
+
+<!-- Splash -->
+<div class="splash" id="splash">
+  <div class="splash-icon">📚</div>
+  <div class="splash-title">Kamal Kids Book</div>
+  <div class="splash-sub">Learning is Fun! 🎉</div>
+</div>
+
+<!-- Header -->
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon" style="background:linear-gradient(135deg,#FF5F6D,#FFC371)">📚</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Kamal Kids Book</div>
+      <div class="brand-bot">LEARNING IS FUN! 🎉</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<!-- Main -->
+<div class="home-wrap">
+
+  <!-- Full Hero Card (App Exact) -->
+  <div class="hero-card">
+    <div class="hero-top-row">
+      <a href="profile.html" class="hero-user">
+        <div class="hero-avatar" id="hero-avatar">
+          <span id="hero-avatar-emoji">📖</span>
+          <img id="hero-avatar-img" src="" alt="Profile">
+        </div>
+        <div>
+          <div class="hero-user-name" id="hero-name">Kamal Kids Book 🌟</div>
+          <div class="online-badge">
+            <span class="online-dot"></span>
+            Online Profile 🛡️
+          </div>
+        </div>
+      </a>
+      <div class="streak-chip">
+        🔥 <span id="hero-streak">1</span> Days
+      </div>
+    </div>
+
+    <div class="hero-tagline">🎯 आपका लक्ष्य: रोज़ कुछ नया सीखो!</div>
+    <div class="hero-big-title">पढ़ो, बढ़ो और जीतो हर दिन इनाम! 🎉</div>
+
+    <div class="hero-badges-scroll">
+      <div class="hero-stat-badge">
+        <div class="emoji">⭐</div>
+        <div class="lbl">Stars</div>
+        <div class="val" id="hero-stars">0</div>
+      </div>
+      <div class="hero-stat-badge">
+        <div class="emoji">💎</div>
+        <div class="lbl">Diamonds</div>
+        <div class="val" id="hero-diamonds">0</div>
+      </div>
+      <div class="hero-stat-badge">
+        <div class="emoji">🎁</div>
+        <div class="lbl">Gifts</div>
+        <div class="val" id="hero-gifts">0</div>
+      </div>
+      <div class="hero-stat-badge">
+        <div class="emoji">🔥</div>
+        <div class="lbl">Streak</div>
+        <div class="val" id="hero-streak-val">1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Age Calculator Banner Card (App Exact) -->
+  <a href="age-calculator.html" class="age-banner-card">
+    <div class="age-banner-left">
+      <div class="age-banner-circle">🎂</div>
+      <div>
+        <div class="age-banner-title">उम्र कैलकुलेटर — अपना जन्मदिन जानें! 🎂</div>
+        <div class="age-banner-sub">कुल महीने, सप्ताह, दिन और सेकंड देखें! ⏱️</div>
+      </div>
+    </div>
+    <div class="age-open-btn">OPEN ›</div>
+  </a>
+
+  <!-- Course Category Heading -->
+  <div class="category-heading">
+    <span>📚</span>
+    <span>सभी विषय / All Courses</span>
+  </div>
+
+  <!-- 8 Course Cards Grid (App Exact) -->
+  <div class="home-grid">
+    <a href="english.html" class="home-card" style="background:linear-gradient(135deg,#FF5F6D,#FFC371)">
+      <div class="home-card-icon">🔤</div>
+      <div class="home-card-title">English</div>
+      <div class="home-card-sub">ABC — अक्षर सीखो</div>
+      <div class="home-card-badge">A-Z</div>
+    </a>
+    <a href="hindi.html" class="home-card" style="background:linear-gradient(135deg,#F2994A,#F2C94C)">
+      <div class="home-card-icon">🇮🇳</div>
+      <div class="home-card-title">हिंदी</div>
+      <div class="home-card-sub">वर्णमाला — हिंदी सीखो</div>
+      <div class="home-card-badge">अ-ज्ञ</div>
+    </a>
+    <a href="urdu.html" class="home-card" style="background:linear-gradient(135deg,#2193b0,#6dd5ed)">
+      <div class="home-card-icon">🌙</div>
+      <div class="home-card-title">Urdu</div>
+      <div class="home-card-sub">اردو — اردو سیکھو</div>
+      <div class="home-card-badge">الف-ی</div>
+    </a>
+    <a href="math.html" class="home-card" style="background:linear-gradient(135deg,#ee0979,#ff6a00)">
+      <div class="home-card-icon">🔢</div>
+      <div class="home-card-title">Math</div>
+      <div class="home-card-sub">गिनती — पहाड़े सीखो</div>
+      <div class="home-card-badge">1-100</div>
+    </a>
+    <a href="stories.html" class="home-card" style="background:linear-gradient(135deg,#00c6ff,#0072ff)">
+      <div class="home-card-icon">📖</div>
+      <div class="home-card-title">Stories</div>
+      <div class="home-card-sub">कहानियाँ — सुनो पढ़ो</div>
+      <div class="home-card-badge">50+</div>
+    </a>
+    <a href="rhymes.html" class="home-card" style="background:linear-gradient(135deg,#8e2de2,#4a00e0)">
+      <div class="home-card-icon">🎵</div>
+      <div class="home-card-title">Rhymes</div>
+      <div class="home-card-sub">नर्सरी राइम्स — गाओ</div>
+      <div class="home-card-badge">🎶</div>
+    </a>
+    <a href="quiz.html" class="home-card" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
+      <div class="home-card-icon">🧩</div>
+      <div class="home-card-title">Quiz</div>
+      <div class="home-card-sub">क्विज़ — खेलो सीखो</div>
+      <div class="home-card-badge">Fun!</div>
+    </a>
+    <a href="drawing.html" class="home-card" style="background:linear-gradient(135deg,#f7971e,#FFD200)">
+      <div class="home-card-icon">🎨</div>
+      <div class="home-card-title">Paint</div>
+      <div class="home-card-sub">चित्र बनाओ — Drawing</div>
+      <div class="home-card-badge">🖌️</div>
+    </a>
+  </div>
+</div>
+
+<!-- Bottom Navigation (App Exact: Home, Awards, Profile) -->
+<nav class="kk-bnav">
+  <a href="index.html" class="active" style="color:#FF5F6D"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+// Splash screen hide after 1.5s
+setTimeout(() => {
+  const sp = document.getElementById('splash');
+  if(sp) sp.classList.add('hidden');
+}, 1500);
+
+// Load Rewards & Profile for Hero Card
+function updateHeroAndStats() {
+  const r = (typeof Rewards !== 'undefined') ? Rewards.get() : {stars:0,diamonds:0,badges:[]};
+  
+  // Profile data
+  let prof = {name:'', photo:'', streak:1};
+  try {
+    prof = JSON.parse(localStorage.getItem('kkb_profile')) || prof;
+  } catch(e){}
+
+  // Name
+  const nameEl = document.getElementById('hero-name');
+  if(nameEl) nameEl.textContent = prof.name ? prof.name : 'Kamal Kids Book 🌟';
+
+  // Photo
+  const imgEl = document.getElementById('hero-avatar-img');
+  const emEl = document.getElementById('hero-avatar-emoji');
+  if(prof.photo && imgEl && emEl) {
+    imgEl.src = prof.photo;
+    imgEl.style.display = 'block';
+    emEl.style.display = 'none';
+  } else if(imgEl && emEl) {
+    imgEl.style.display = 'none';
+    emEl.style.display = 'block';
+  }
+
+  // Streak
+  const streak = prof.streak || 1;
+  const s1 = document.getElementById('hero-streak');
+  const s2 = document.getElementById('hero-streak-val');
+  if(s1) s1.textContent = streak;
+  if(s2) s2.textContent = streak;
+
+  // Stats
+  const st = document.getElementById('hero-stars');
+  const dm = document.getElementById('hero-diamonds');
+  const gf = document.getElementById('hero-gifts');
+  if(st) st.textContent = r.stars || 0;
+  if(dm) dm.textContent = r.diamonds || 0;
+  if(gf) gf.textContent = (r.badges || []).length;
+
+  // Header stats
+  if(typeof updateHeaderStats === 'function') updateHeaderStats();
+}
+
+updateHeroAndStats();
+setInterval(updateHeroAndStats, 2000);
+</script>
+</body>
+</html>

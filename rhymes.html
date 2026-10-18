@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Rhymes — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;900&family=Hind:wght@400;700&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-logo-icon{background:linear-gradient(135deg,#8e2de2,#4a00e0)}
+.kk-tab.active{color:#8e2de2}
+</style>
+</head>
+<body>
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🎵</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Rhymes</div>
+      <div class="brand-bot">KIDS RHYMES 🎶</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+<div class="kk-tabs">
+  <button class="kk-tab active" onclick="switchTab('pane-en',this,'#8e2de2')">English 🇬🇧</button>
+  <button class="kk-tab" onclick="switchTab('pane-hi',this,'#8e2de2');buildHiRhymes()">हिंदी 🇮🇳</button>
+</div>
+
+<div id="pane-en" class="tab-pane active kk-main">
+  <div class="s-wrap" id="en-rhymes"></div>
+</div>
+<div id="pane-hi" class="tab-pane kk-main">
+  <div class="s-wrap" id="hi-rhymes"></div>
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const EN_RHYMES=[
+  {title:'Johnny Johnny Yes Papa',img:'images/rhyme_johnny.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',lang:'en-US',
+   text:'Johnny Johnny, yes Papa?\nEating sugar? No Papa.\nTelling lies? No Papa.\nOpen your mouth — Ha ha ha!'},
+  {title:'Twinkle Twinkle Little Star',img:'images/rhyme_twinkle.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',lang:'en-US',
+   text:'Twinkle, twinkle, little star,\nHow I wonder what you are!\nUp above the world so high,\nLike a diamond in the sky.\nWhen the blazing sun is gone,\nWhen he nothing shines upon,\nThen you show your little light,\nTwinkle, twinkle, all the night!'},
+  {title:'Rain Rain Go Away',img:'images/rhyme_rain.webp',bg:'linear-gradient(145deg,#0a1f2d,#0d2840)',ac:'#00BCD4',lang:'en-US',
+   text:'Rain, rain, go away,\nCome again another day,\nLittle children want to play,\nRain, rain, go away!'},
+  {title:'Baa Baa Black Sheep',img:'images/rhyme_sheep.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',lang:'en-US',
+   text:'Baa, baa, black sheep,\nHave you any wool?\nYes sir, yes sir,\nThree bags full!\nOne for the master,\nOne for the dame,\nAnd one for the little boy\nWho lives down the lane.'},
+  {title:'Jack and Jill',img:'images/rhyme_jackjill.webp',bg:'linear-gradient(145deg,#1a1a0a,#2d2d10)',ac:'#FFC107',lang:'en-US',
+   text:'Jack and Jill went up the hill\nTo fetch a pail of water.\nJack fell down and broke his crown,\nAnd Jill came tumbling after.'},
+  {title:'Humpty Dumpty',img:'images/rhyme_humpty.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#F44336',lang:'en-US',
+   text:'Humpty Dumpty sat on a wall,\nHumpty Dumpty had a great fall.\nAll the king\'s horses and all the king\'s men\nCouldn\'t put Humpty together again.'},
+  {title:'Wheels on the Bus',img:'images/rhyme_bus.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',lang:'en-US',
+   text:'The wheels on the bus go round and round,\nRound and round, round and round.\nThe wheels on the bus go round and round,\nAll through the town!\nThe horn on the bus goes beep beep beep...\nThe wipers on the bus go swish swish swish...'},
+  {title:'Baby Shark',img:'images/rhyme_babyshark.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',lang:'en-US',
+   text:'Baby shark, doo doo doo doo doo doo!\nBaby shark, doo doo doo doo doo doo!\nBaby shark!\nMommy shark, doo doo doo doo doo doo!\nDaddy shark, doo doo doo doo doo doo!\nGrandma shark, doo doo doo doo doo doo!'},
+  {title:'Old MacDonald Had a Farm',img:'images/rhyme_horse.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FF9800',lang:'en-US',
+   text:'Old MacDonald had a farm, E-I-E-I-O!\nAnd on his farm he had a cow, E-I-E-I-O!\nWith a moo moo here and a moo moo there,\nHere a moo, there a moo, everywhere a moo moo!\nOld MacDonald had a farm, E-I-E-I-O!'},
+  {title:'Row Your Boat',img:'images/rhyme_rowboat.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'en-US',
+   text:'Row, row, row your boat,\nGently down the stream.\nMerrily, merrily, merrily, merrily,\nLife is but a dream!'},
+  {title:'Five Little Ducks',img:'images/rhyme_ducks.webp',bg:'linear-gradient(145deg,#0a1f2d,#0d2840)',ac:'#00BCD4',lang:'en-US',
+   text:'Five little ducks went swimming one day,\nOver the hills and far away.\nMother duck said quack quack quack quack,\nBut only four little ducks came back!'},
+  {title:'Hickory Dickory Dock',img:'images/rhyme_hickory.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',lang:'en-US',
+   text:'Hickory, dickory, dock,\nThe mouse ran up the clock.\nThe clock struck one,\nThe mouse ran down,\nHickory, dickory, dock!'},
+  {title:'Ten in the Bed',img:'images/rhyme_tenbed.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',lang:'en-US',
+   text:'There were ten in the bed and the little one said,\n"Roll over! Roll over!"\nSo they all rolled over and one fell out.\nThere were nine in the bed...'},
+  {title:'Bingo Dog Song',img:'images/rhyme_bingo.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',lang:'en-US',
+   text:'There was a farmer had a dog and Bingo was his name-o.\nB-I-N-G-O! B-I-N-G-O! B-I-N-G-O!\nAnd Bingo was his name-o!'},
+  {title:'One Two Buckle My Shoe',img:'images/rhyme_buckleshoe.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',lang:'en-US',
+   text:'One, two, buckle my shoe,\nThree, four, knock at the door,\nFive, six, pick up sticks,\nSeven, eight, lay them straight,\nNine, ten, a big fat hen!'},
+  {title:'Finger Family',img:'images/rhyme_finger.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'en-US',
+   text:'Daddy finger, Daddy finger, where are you?\nHere I am! Here I am! How do you do?\nMommy finger, Mommy finger, where are you?\nHere I am! Here I am! How do you do!\nBaby finger, Baby finger, where are you?\nHere I am! Here I am! How do you do!'},
+];
+
+const HI_RHYMES=[
+  {title:'आलू कचालू',img:'images/rhyme_aalu.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#F2994A',lang:'hi-IN',
+   text:'आलू कचालू बेटा कहाँ गए थे,\nदादी के घर खाना खाने गए थे।\nदादी ने दिया दूध रोटी,\nपेट भर खाया बच्चे की टोटी।'},
+  {title:'मछली जल की रानी है',img:'images/rhyme_machli.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',lang:'hi-IN',
+   text:'मछली जल की रानी है,\nजीवन उसका पानी है।\nहाथ लगाओ डर जाएगी,\nबाहर निकालो मर जाएगी।'},
+  {title:'मोरनी नाची',img:'images/rhyme_morni.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'hi-IN',
+   text:'मोरनी नाची जंगल में,\nसब चिड़िया झूमीं उसके संग में।\nबादल आए बूँदें लाए,\nमोरनी ने पंख फैलाए।'},
+  {title:'चंदा मामा',img:'images/rhyme_chanda.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',lang:'hi-IN',
+   text:'चंदा मामा दूर के, पुए पकाएँ बूर के।\nआप खाएं थाली में, मुन्ने को दें प्याली में।\nप्याली गई टूट, मुन्ना गया रूठ।'},
+  {title:'लकड़ी की काठी',img:'images/rhyme_horse.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',lang:'hi-IN',
+   text:'लकड़ी की काठी, काठी पे घोड़ा।\nघोड़े की दुम पे जो मारा हथौड़ा।\nदौड़ा दौड़ा दौड़ा घोड़ा दुम उठाके दौड़ा।'},
+  {title:'हाथी राजा',img:'images/rhyme_hathi.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'hi-IN',
+   text:'हाथी राजा कहाँ चले,\nसूँड़ उठाकर आगे बढ़े।\nकिसको डर, किसको भय,\nहाथी राजा जय जय जय।'},
+  {title:'चूहे की शादी',img:'images/rhyme_chuha.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',lang:'hi-IN',
+   text:'चूहे की शादी होनी थी,\nचूहा निकला बारात लेकर।\nसब जानवर नाचे झूमे,\nढोल बजाया जोर-शोर से।'},
+  {title:'बंदर मामा',img:'images/rhyme_bandar.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',lang:'hi-IN',
+   text:'बंदर मामा पहन पाजामा,\nपूरी खाकर ऊँघ गए।\nनाक बजाकर सो गए मामा,\nसपने देखें ऊँचे उड़ने के।'},
+  {title:'पेड़ लगाओ',img:'images/rhyme_ped.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'hi-IN',
+   text:'पेड़ लगाओ पेड़ लगाओ,\nधरती को हरा-भरा बनाओ।\nपेड़ देते फल और छाया,\nपेड़ों से मिलती हरियाया।'},
+  {title:'नई कविता 1',img:'images/rhyme_h_new_1.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FF9800',lang:'hi-IN',
+   text:'आओ बच्चों पढ़ो लिखो,\nज्ञान का दीपक जलाओ।\nमेहनत करो सच बोलो,\nनया उजाला फैलाओ।'},
+  {title:'नई कविता 2',img:'images/rhyme_h_new_2.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',lang:'hi-IN',
+   text:'सूरज निकला पूरब से,\nरोशनी छाई सब ओर।\nचिड़िया ने गाना गाया,\nशुरू हुआ नया भोर।'},
+  {title:'नई कविता 3',img:'images/rhyme_h_new_3.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',lang:'hi-IN',
+   text:'बारिश आई बारिश आई,\nभीगी सारी दुनिया।\nमेंढक बोला टर्र टर्र,\nखुशी से नाचा मुनिया।'},
+  {title:'नई कविता 4',img:'images/rhyme_h_new_4.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',lang:'hi-IN',
+   text:'गाय हमारी माँ समान,\nदूध देती है महान।\nप्यार से उसको पालो,\nजीवन को खुशहाल करो।'},
+  {title:'नई कविता 5',img:'images/rhyme_h_new_5.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',lang:'hi-IN',
+   text:'फूल खिले हैं बाग में,\nखुशबू फैली चारों ओर।\nतितली आई उड़ती आई,\nमचाया सुंदर शोर।'},
+  {title:'नई कविता 6',img:'images/rhyme_h_new_6.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',lang:'hi-IN',
+   text:'बच्चा हूँ मैं प्यारा बच्चा,\nपढ़ूँगा मैं सच्चा।\nमाँ बाबा का नाम रोशन करूँगा,\nदेश को आगे बढ़ाऊँगा।'},
+];
+
+let activeRhymeBtn = null;
+
+function toggleRhyme(btn, text, lang) {
+  if (activeRhymeBtn && activeRhymeBtn !== btn) {
+    activeRhymeBtn.textContent = '🔊 सुनें / Listen';
+    activeRhymeBtn.classList.remove('playing');
+    Speech.stop();
+  }
+  if (Speech.isSpeaking() && activeRhymeBtn === btn) {
+    Speech.stop(); btn.textContent = '🔊 सुनें / Listen'; btn.classList.remove('playing'); activeRhymeBtn = null;
+  } else {
+    activeRhymeBtn = btn; btn.textContent = '⏸ Stop'; btn.classList.add('playing');
+    Speech.speak(text, lang, 0.88, () => { btn.textContent = '🔊 सुनें / Listen'; btn.classList.remove('playing'); if(activeRhymeBtn===btn) activeRhymeBtn=null; });
+    Rewards.addStars(2);
+  }
+}
+
+function buildRhymes(list, wrapperId) {
+  const el = document.getElementById(wrapperId);
+  if (el.children.length) return;
+  list.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'rhyme-card';
+    card.style.background = r.bg;
+    card.innerHTML = `
+      <img src="${r.img}" alt="${r.title}" onerror="this.style.height='3px'" style="width:100%;height:180px;object-fit:cover;display:block">
+      <div class="rhyme-body">
+        <div class="rhyme-title">${r.title}</div>
+        <div class="rhyme-text">${r.text.replace(/\n/g,'<br>')}</div>
+        <button class="rhyme-btn" style="background:linear-gradient(135deg,${r.ac},${r.ac}99)"
+          onclick="toggleRhyme(this,\`${r.text.replace(/`/g,'\\`')}\`,'${r.lang}')">
+          🔊 सुनें / Listen
+        </button>
+      </div>`;
+    el.appendChild(card);
+  });
+}
+
+function buildHiRhymes() { buildRhymes(HI_RHYMES, 'hi-rhymes'); }
+buildRhymes(EN_RHYMES, 'en-rhymes');
+</script>
+</body>
+</html>

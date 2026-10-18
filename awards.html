@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Awards — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-tab.active{color:#FFD700}
+.kk-logo-icon{background:linear-gradient(135deg,#FFD700,#FF8C00);box-shadow:0 4px 14px rgba(255,215,0,0.4)}
+.brand-bot{color:#FFD700}
+.awards-wrap{padding:20px 16px;max-width:640px;margin:0 auto;padding-bottom:90px}
+/* Stats strip */
+.stats-strip{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.stat-box{border-radius:24px;padding:22px 18px;text-align:center;background:rgba(255,255,255,0.06);box-shadow:0 6px 24px rgba(0,0,0,0.3)}
+.stat-icon{font-size:3rem;display:block;margin-bottom:8px}
+.stat-val{font-size:3rem;font-weight:900;line-height:1;color:#FFD700}
+.stat-lbl{font-size:0.85rem;color:rgba(255,255,255,0.55);margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px}
+/* Progress to next */
+.next-badge-card{border-radius:24px;padding:20px 20px;margin-bottom:24px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.next-badge-label{font-size:0.9rem;color:rgba(255,255,255,0.6);font-weight:700;margin-bottom:8px}
+.next-badge-title{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:14px}
+.progress-bar-bg{height:12px;background:rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.progress-bar-fill{height:100%;border-radius:6px;transition:width 0.6s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(90deg,#FFD700,#FF8C00)}
+.progress-pct{font-size:0.85rem;color:rgba(255,255,255,0.5);text-align:right}
+/* Badges grid */
+.badges-section-title{font-size:1.1rem;font-weight:900;color:#fff;margin:4px 0 16px;opacity:0.9}
+.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.badge-card{border-radius:20px;padding:18px 10px;text-align:center;background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.08);transition:all 0.3s;position:relative}
+.badge-card.earned{background:rgba(255,215,0,0.1);border-color:rgba(255,215,0,0.4);box-shadow:0 4px 16px rgba(255,215,0,0.2)}
+.badge-card.locked{filter:grayscale(1);opacity:0.45}
+.badge-icon{font-size:2.8rem;display:block;margin-bottom:8px}
+.badge-name{font-size:0.85rem;font-weight:900;color:#fff;line-height:1.3}
+.badge-req{font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:4px}
+.badge-earned-mark{position:absolute;top:8px;right:8px;font-size:1.1rem}
+/* Recent activity */
+.activity-card{border-radius:20px;padding:18px;background:rgba(255,255,255,0.05);margin-bottom:14px;border:1px solid rgba(255,255,255,0.08)}
+.activity-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.activity-row:last-child{border-bottom:none}
+.activity-icon{font-size:1.6rem;flex-shrink:0;width:36px;text-align:center}
+.activity-text{flex:1;font-size:0.9rem;color:rgba(255,255,255,0.8)}
+.activity-val{font-size:0.9rem;font-weight:900;color:#FFD700}
+/* Reset btn */
+.reset-btn{width:100%;padding:14px;border:2px solid rgba(255,255,255,0.15);border-radius:20px;background:transparent;color:rgba(255,255,255,0.4);font-size:0.95rem;font-weight:700;cursor:pointer;font-family:'Baloo 2',sans-serif;transition:all 0.2s;margin-top:8px}
+.reset-btn:hover{border-color:rgba(244,67,54,0.5);color:#EF9A9A}
+/* Confetti */
+.confetti-piece{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;animation:confettiFall linear forwards;pointer-events:none;z-index:9999}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🏆</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">Awards</div>
+      <div class="brand-bot">YOUR REWARDS 🏅</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-d">0</span></div>
+  </div>
+</header>
+
+<div id="awards-wrap" class="awards-wrap"></div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html" class="active" style="color:#FFD700"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const BADGES = [
+  {id:'star10',  icon:'🌟', name:'First Steps',     req:10,   type:'stars',    desc:'Earn 10 stars'},
+  {id:'star25',  icon:'⭐', name:'Star Learner',    req:25,   type:'stars',    desc:'Earn 25 stars'},
+  {id:'star50',  icon:'🥉', name:'Bronze Star',     req:50,   type:'stars',    desc:'Earn 50 stars'},
+  {id:'star100', icon:'🥈', name:'Silver Star',     req:100,  type:'stars',    desc:'Earn 100 stars'},
+  {id:'star200', icon:'🥇', name:'Gold Star',       req:200,  type:'stars',    desc:'Earn 200 stars'},
+  {id:'star500', icon:'👑', name:'Champion',        req:500,  type:'stars',    desc:'Earn 500 stars'},
+  {id:'d10',     icon:'💎', name:'Diamond Starter', req:10,   type:'diamonds', desc:'Earn 10 diamonds'},
+  {id:'d25',     icon:'💠', name:'Diamond Learner', req:25,   type:'diamonds', desc:'Earn 25 diamonds'},
+  {id:'d50',     icon:'🏆', name:'Trophy Winner',   req:50,   type:'diamonds', desc:'Earn 50 diamonds'},
+];
+
+const MILESTONES_STARS = [10,25,50,100,200,500,1000];
+
+function getRewards() {
+  try { return JSON.parse(localStorage.getItem('kkb_rewards')) || {stars:0,diamonds:0,badges:[]}; }
+  catch(e) { return {stars:0,diamonds:0,badges:[]}; }
+}
+
+function saveRewards(r) {
+  localStorage.setItem('kkb_rewards', JSON.stringify(r));
+}
+
+function checkAndAwardBadges(r) {
+  let newBadge = false;
+  BADGES.forEach(b => {
+    if (!r.badges.includes(b.id)) {
+      const val = b.type === 'stars' ? r.stars : r.diamonds;
+      if (val >= b.req) {
+        r.badges.push(b.id);
+        newBadge = true;
+      }
+    }
+  });
+  if (newBadge) { saveRewards(r); launchConfetti(); }
+  return r;
+}
+
+function launchConfetti() {
+  const colors = ['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FF8C00','#DDA0DD'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      el.style.animationDelay = (Math.random() * 0.5) + 's';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 30);
+  }
+}
+
+function getNextMilestone(stars) {
+  for (const m of MILESTONES_STARS) { if (stars < m) return m; }
+  return null;
+}
+
+function render() {
+  let r = getRewards();
+  r = checkAndAwardBadges(r);
+  const stars = r.stars || 0;
+  const diamonds = r.diamonds || 0;
+  const badges = r.badges || [];
+  const nextMile = getNextMilestone(stars);
+  const pct = nextMile ? Math.round(stars / nextMile * 100) : 100;
+  const prevMile = MILESTONES_STARS.filter(m => m <= stars).pop() || 0;
+  const fillPct = nextMile ? Math.round((stars - prevMile) / (nextMile - prevMile) * 100) : 100;
+
+  const wrap = document.getElementById('awards-wrap');
+  wrap.innerHTML = `
+    <!-- Stats -->
+    <div class="stats-strip">
+      <div class="stat-box" style="background:linear-gradient(145deg,#1f1800,#2d2200)">
+        <span class="stat-icon">⭐</span>
+        <div class="stat-val">${stars}</div>
+        <div class="stat-lbl">Total Stars</div>
+      </div>
+      <div class="stat-box" style="background:linear-gradient(145deg,#0a1828,#0d1e34)">
+        <span class="stat-icon">💎</span>
+        <div class="stat-val" style="color:#4FC3F7">${diamonds}</div>
+        <div class="stat-lbl">Diamonds</div>
+      </div>
+    </div>
+
+    <!-- Next milestone -->
+    ${nextMile ? `
+    <div class="next-badge-card">
+      <div class="next-badge-label">🎯 Progress to next milestone</div>
+      <div class="next-badge-title">${stars} / ${nextMile} stars — ${fillPct}% complete</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${fillPct}%"></div></div>
+      <div class="progress-pct">${nextMile - stars} more stars to go!</div>
+    </div>` : `
+    <div class="next-badge-card">
+      <div class="next-badge-title" style="text-align:center;font-size:1.5rem">🎉 You have earned all milestones! You are a Champion!</div>
+    </div>`}
+
+    <!-- Badges -->
+    <div class="badges-section-title">🏅 Your Badges (${badges.length}/${BADGES.length})</div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <!-- Activity -->
+    <div class="activity-card">
+      <div class="badges-section-title" style="margin:0 0 8px">📊 Your Progress</div>
+      <div class="activity-row">
+        <span class="activity-icon">📖</span>
+        <span class="activity-text">Stories listened</span>
+        <span class="activity-val">${Math.floor(stars/3)} est.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-icon">🔤</span>
+        <span class="activity-text">Letters learned</span>
+        <span class="activity-val">${Math.min(stars, 52)}</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-icon">🧩</span>
+        <span class="activity-text">Quiz answers correct</span>
+        <span class="activity-val">${Math.floor(stars/5)}</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-icon">🏅</span>
+        <span class="activity-text">Badges earned</span>
+        <span class="activity-val">${badges.length}</span>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="confirmReset()">🗑️ Reset All Progress</button>
+  `;
+
+  // Build badges grid
+  const grid = document.getElementById('badges-grid');
+  BADGES.forEach(b => {
+    const earned = badges.includes(b.id);
+    const val = b.type === 'stars' ? stars : diamonds;
+    const card = document.createElement('div');
+    card.className = 'badge-card ' + (earned ? 'earned' : 'locked');
+    card.innerHTML = `
+      ${earned ? '<div class="badge-earned-mark">✅</div>' : ''}
+      <span class="badge-icon">${b.icon}</span>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-req">${b.desc}</div>
+      ${!earned ? `<div class="badge-req" style="color:#FFD70066;margin-top:4px">${val}/${b.req}</div>` : ''}
+    `;
+    if (earned) {
+      card.onclick = () => { launchConfetti(); };
+    }
+    grid.appendChild(card);
+  });
+
+  // Update header
+  document.getElementById('hdr-stars').textContent = stars;
+  document.getElementById('hdr-d').textContent = diamonds;
+}
+
+function confirmReset() {
+  if (confirm('Reset all stars, diamonds and badges? This cannot be undone.')) {
+    localStorage.setItem('kkb_rewards', JSON.stringify({stars:0,diamonds:0,badges:[]}));
+    render();
+  }
+}
+
+render();
+setInterval(render, 3000);
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>हिंदी — Kamal Kids Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;900&family=Hind:wght@400;700&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.kk-logo-icon{background:linear-gradient(135deg,#F2994A,#F2C94C)}
+.kk-tab.active{color:#F2994A}
+</style>
+</head>
+<body>
+<header class="kk-header">
+  <a href="index.html" class="kk-logo">
+    <div class="kk-logo-icon">🇮🇳</div>
+    <div class="kk-logo-text">
+      <div class="brand-top">हिंदी</div>
+      <div class="brand-bot">HINDI COURSE 📚</div>
+    </div>
+  </a>
+  <div class="kk-stats">
+    <div class="kk-stat">⭐ <span id="hdr-stars">0</span></div>
+    <div class="kk-stat">💎 <span id="hdr-diamonds">0</span></div>
+  </div>
+</header>
+
+<div class="kk-tabs">
+  <button class="kk-tab active" onclick="switchTab('pane-akshar',this,'#F2994A')">वर्णमाला</button>
+  <button class="kk-tab" onclick="switchTab('pane-abhyas',this,'#F2994A');buildAbhyas()">अभ्यास (स्वर/व्यंजन)</button>
+  <button class="kk-tab" onclick="switchTab('pane-grid',this,'#F2994A');buildHiGrid()">Grid View</button>
+  <button class="kk-tab" onclick="switchTab('pane-stories',this,'#F2994A');buildHiStories()">कहानियाँ 📖</button>
+</div>
+
+<!-- अभ्यास Tab (App Exact: स्वर, व्यंजन, मात्राओं की पहचान) -->
+<div id="pane-abhyas" class="tab-pane kk-main">
+  <div class="abhyas-wrap" id="abhyas-wrap" style="padding:16px;max-width:600px;margin:0 auto"></div>
+</div>
+
+<div id="pane-akshar" class="tab-pane active kk-main">
+  <div class="alpha-wrap">
+    <div class="alpha-card" id="hi-card">
+      <img src="images/hindi_v2_a.webp" alt="अनार" style="width:100%;height:62%;object-fit:cover">
+      <div class="alpha-card-body">
+        <div class="alpha-letter" id="hi-letter" style="color:#F2994A;font-family:'Hind',sans-serif">अ</div>
+        <div class="alpha-word" id="hi-word" style="font-family:'Hind',sans-serif">अनार</div>
+        <div class="alpha-hindi" id="hi-hindi">Pomegranate</div>
+        <div class="alpha-phrase" id="hi-phrase" style="font-family:'Hind',sans-serif">अ से अनार</div>
+      </div>
+    </div>
+    <div class="alpha-controls">
+      <button class="alpha-btn" onclick="hiPrev()">◀</button>
+      <button class="alpha-play" id="hi-play" style="background:linear-gradient(135deg,#F2994A,#F2C94C);color:#fff" onclick="hiPlayFn()">▶</button>
+      <button class="alpha-btn" onclick="hiNext()">▶</button>
+    </div>
+    <div id="hi-counter" style="color:rgba(255,255,255,0.5);text-align:center;font-size:0.85rem;padding-bottom:8px">1 / 46</div>
+  </div>
+</div>
+
+<div id="pane-grid" class="tab-pane kk-main">
+  <div class="grid-wrap"><div class="alpha-grid" id="hi-grid"></div></div>
+</div>
+
+<div id="pane-stories" class="tab-pane kk-main">
+  <div class="s-wrap" id="hi-stories-wrap"></div>
+</div>
+
+<nav class="kk-bnav">
+  <a href="index.html"><span class="nb-icon">🏠</span>Home</a>
+  <a href="awards.html"><span class="nb-icon">🏆</span>Awards</a>
+  <a href="profile.html"><span class="nb-icon">👤</span>Profile</a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+const HI_ALPHA=[
+  {letter:'अ',word:'अनार',hindi:'Pomegranate',img:'images/hindi_v2_a.webp',phrase:'अ से अनार',color:'#F44336'},
+  {letter:'आ',word:'आम',hindi:'Mango',img:'images/hindi_v2_aa.webp',phrase:'आ से आम',color:'#FF9800'},
+  {letter:'इ',word:'इमली',hindi:'Tamarind',img:'images/hindi_v2_i.webp',phrase:'इ से इमली',color:'#4CAF50'},
+  {letter:'ई',word:'ईख',hindi:'Sugarcane',img:'images/hindi_v2_ee.webp',phrase:'ई से ईख',color:'#8BC34A'},
+  {letter:'उ',word:'उल्लू',hindi:'Owl',img:'images/hindi_v2_u.webp',phrase:'उ से उल्लू',color:'#2196F3'},
+  {letter:'ऊ',word:'ऊंट',hindi:'Camel',img:'images/hindi_v2_oo.webp',phrase:'ऊ से ऊंट',color:'#FF9800'},
+  {letter:'ऋ',word:'ऋषि',hindi:'Sage',img:'images/hindi_v2_ri.webp',phrase:'ऋ से ऋषि',color:'#9C27B0'},
+  {letter:'ए',word:'एड़ी',hindi:'Heel',img:'images/hindi_v2_e.webp',phrase:'ए से एड़ी',color:'#E91E63'},
+  {letter:'ऐ',word:'ऐनक',hindi:'Spectacles',img:'images/hindi_v2_ai.webp',phrase:'ऐ से ऐनक',color:'#2196F3'},
+  {letter:'ओ',word:'ओखली',hindi:'Mortar',img:'images/hindi_v2_o.webp',phrase:'ओ से ओखली',color:'#FFC107'},
+  {letter:'औ',word:'औरत',hindi:'Woman',img:'images/hindi_v2_au.webp',phrase:'औ से औरत',color:'#E91E63'},
+  {letter:'अं',word:'अंगूर',hindi:'Grapes',img:'images/hindi_v2_ang.webp',phrase:'अं से अंगूर',color:'#4CAF50'},
+  {letter:'क',word:'कबूतर',hindi:'Pigeon',img:'images/hindi_v2_ka.webp',phrase:'क से कबूतर',color:'#2196F3'},
+  {letter:'ख',word:'खरगोश',hindi:'Rabbit',img:'images/hindi_v2_kha.webp',phrase:'ख से खरगोश',color:'#FF9800'},
+  {letter:'ग',word:'गमला',hindi:'Pot',img:'images/hindi_v2_ga.webp',phrase:'ग से गमला',color:'#4CAF50'},
+  {letter:'घ',word:'घड़ा',hindi:'Pot',img:'images/hindi_v2_gha.webp',phrase:'घ से घड़ा',color:'#E91E63'},
+  {letter:'च',word:'चम्मच',hindi:'Spoon',img:'images/hindi_v2_cha.webp',phrase:'च से चम्मच',color:'#9C27B0'},
+  {letter:'छ',word:'छतरी',hindi:'Umbrella',img:'images/hindi_v2_chha.webp',phrase:'छ से छतरी',color:'#2196F3'},
+  {letter:'ज',word:'जहाज',hindi:'Ship',img:'images/hindi_v2_ja.webp',phrase:'ज से जहाज',color:'#00BCD4'},
+  {letter:'झ',word:'झंडा',hindi:'Flag',img:'images/hindi_v2_jha.webp',phrase:'झ से झंडा',color:'#F44336'},
+  {letter:'ट',word:'टमाटर',hindi:'Tomato',img:'images/hindi_v2_ta.webp',phrase:'ट से टमाटर',color:'#F44336'},
+  {letter:'ठ',word:'ठेला',hindi:'Cart',img:'images/hindi_v2_tha.webp',phrase:'ठ से ठेला',color:'#FF9800'},
+  {letter:'ड',word:'डमरू',hindi:'Drum',img:'images/hindi_v2_da.webp',phrase:'ड से डमरू',color:'#9C27B0'},
+  {letter:'ढ',word:'ढोलक',hindi:'Drum',img:'images/hindi_v2_dha.webp',phrase:'ढ से ढोलक',color:'#E91E63'},
+  {letter:'त',word:'तरबूज',hindi:'Watermelon',img:'images/hindi_v2_ta2.webp',phrase:'त से तरबूज',color:'#4CAF50'},
+  {letter:'थ',word:'थाली',hindi:'Plate',img:'images/hindi_v2_tha2.webp',phrase:'थ से थाली',color:'#FFC107'},
+  {letter:'द',word:'दवाई',hindi:'Medicine',img:'images/hindi_v2_da2.webp',phrase:'द से दवाई',color:'#2196F3'},
+  {letter:'ध',word:'धनुष',hindi:'Bow',img:'images/hindi_v2_dha2.webp',phrase:'ध से धनुष',color:'#9C27B0'},
+  {letter:'न',word:'नल',hindi:'Tap',img:'images/hindi_v2_na.webp',phrase:'न से नल',color:'#00BCD4'},
+  {letter:'प',word:'पतंग',hindi:'Kite',img:'images/hindi_v2_pa.webp',phrase:'प से पतंग',color:'#FF9800'},
+  {letter:'फ',word:'फल',hindi:'Fruit',img:'images/hindi_v2_pha.webp',phrase:'फ से फल',color:'#4CAF50'},
+  {letter:'ब',word:'बकरी',hindi:'Goat',img:'images/hindi_v2_ba.webp',phrase:'ब से बकरी',color:'#E91E63'},
+  {letter:'भ',word:'भालू',hindi:'Bear',img:'images/hindi_v2_bha.webp',phrase:'भ से भालू',color:'#795548'},
+  {letter:'म',word:'मछली',hindi:'Fish',img:'images/hindi_v2_ma.webp',phrase:'म से मछली',color:'#2196F3'},
+  {letter:'य',word:'यक',hindi:'Yak',img:'images/hindi_v2_ya.webp',phrase:'य से यक',color:'#FF9800'},
+  {letter:'र',word:'रथ',hindi:'Chariot',img:'images/hindi_v2_ra.webp',phrase:'र से रथ',color:'#F44336'},
+  {letter:'ल',word:'लोटा',hindi:'Pot',img:'images/hindi_v2_la.webp',phrase:'ल से लोटा',color:'#4CAF50'},
+  {letter:'व',word:'वायुयान',hindi:'Aeroplane',img:'images/hindi_v2_va.webp',phrase:'व से वायुयान',color:'#2196F3'},
+  {letter:'श',word:'शेर',hindi:'Lion',img:'images/hindi_v2_sha.webp',phrase:'श से शेर',color:'#9C27B0'},
+  {letter:'ष',word:'षट्कोण',hindi:'Hexagon',img:'images/hindi_v2_sha2.webp',phrase:'ष से षट्कोण',color:'#E91E63'},
+  {letter:'स',word:'सेब',hindi:'Apple',img:'images/hindi_v2_sa.webp',phrase:'स से सेब',color:'#F44336'},
+  {letter:'ह',word:'हाथी',hindi:'Elephant',img:'images/hindi_v2_ha.webp',phrase:'ह से हाथी',color:'#607D8B'},
+  {letter:'क्ष',word:'क्षत्रिय',hindi:'Warrior',img:'images/hindi_v2_ksha.webp',phrase:'क्ष से क्षत्रिय',color:'#FF5722'},
+  {letter:'त्र',word:'त्रिकोण',hindi:'Triangle',img:'images/hindi_v2_tra.webp',phrase:'त्र से त्रिकोण',color:'#9C27B0'},
+  {letter:'ज्ञ',word:'ज्ञान',hindi:'Knowledge',img:'images/hindi_v2_gya.webp',phrase:'ज्ञ से ज्ञान',color:'#2196F3'},
+];
+
+const HI_STORIES=[
+  {title:'जादुई ब्रश की कहानी',img:'images/hindi_story_1.webp',bg:'linear-gradient(145deg,#1a1400,#281e00)',ac:'#F2994A',
+   text:'एक गरीब बच्चे के पास एक जादुई ब्रश था। जो भी वह बनाता, वह जीवित हो जाता।\n\nएक दिन उसने एक नदी बनाई और उसमें मछलियाँ तैरने लगीं। फिर उसने एक पेड़ बनाया और उस पर पक्षी बैठ गए।\n\nलालची राजा ने उससे सोना बनाने को कहा। लेकिन बच्चे ने ब्रश से समुद्र बना दिया और राजा उसमें डूब गया।\n\nनैतिक: लालच बुरी बला है।'},
+  {title:'जंगल का राजा',img:'images/hindi_story_2.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'एक जंगल में शेर राज करता था। वह बहुत क्रूर था और रोज एक जानवर खाता था।\n\nसभी जानवरों ने मिलकर एक योजना बनाई। एक चालाक खरगोश ने शेर को एक कुएँ के पास ले गया।\n\nशेर ने कुएँ में अपनी परछाईं देखी और उसे दूसरा शेर समझकर कूद पड़ा।\n\nनैतिक: बुद्धि शक्ति से बड़ी होती है।'},
+  {title:'सच्चा मित्र',img:'images/hindi_story_3.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',
+   text:'दो मित्र जंगल से गुजर रहे थे। अचानक एक भालू आया। एक मित्र पेड़ पर चढ़ गया।\n\nदूसरा मित्र गिर गया और मरने का नाटक किया। भालू ने उसे सूँघा और चला गया।\n\nपेड़ से उतरकर पहले मित्र ने पूछा — भालू ने क्या कहा? दूसरे ने जवाब दिया — मुसीबत में साथ छोड़ने वाला मित्र नहीं होता।\n\nनैतिक: सच्चा मित्र मुसीबत में काम आता है।'},
+  {title:'चींटी और टिड्डा',img:'images/hindi_story_4.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',
+   text:'गर्मियों में एक चींटी मेहनत से खाना इकट्ठा कर रही थी। एक टिड्डा मस्ती कर रहा था।\n\nटिड्डे ने पूछा — इतनी मेहनत क्यों करती हो? चींटी ने कहा — सर्दी के लिए तैयारी कर रही हूँ।\n\nजब सर्दी आई तो टिड्डे के पास खाना नहीं था। भूखा टिड्डा चींटी के पास गया।\n\nनैतिक: कल की तैयारी आज करो।'},
+  {title:'लालची कुत्ता',img:'images/hindi_story_5.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',
+   text:'एक कुत्ते को एक बड़ी हड्डी मिली। वह उसे लेकर पुल के ऊपर से गुजरा।\n\nपानी में उसे अपनी परछाईं दिखी। उसने सोचा — उस कुत्ते के पास भी बड़ी हड्डी है!\n\nवह भौंका तो उसकी हड्डी पानी में गिर गई। अब उसके पास कुछ नहीं था।\n\nनैतिक: लालच में आकर जो है वह भी खो देते हैं।'},
+  {title:'एक बुद्धिमान किसान',img:'images/hindi_story_6.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'एक बुद्धिमान किसान के चार बेटे थे जो हमेशा लड़ते रहते थे।\n\nमरने से पहले किसान ने उन्हें एक-एक लकड़ी दी। सबने आसानी से तोड़ी। फिर उसने चारों लकड़ियाँ एक साथ बाँधकर दीं। कोई नहीं तोड़ सका।\n\nकिसान ने कहा — अकेले हो तो टूट जाओगे, मिलकर रहो तो अजेय रहोगे।\n\nनैतिक: एकता में शक्ति है।'},
+  {title:'प्यासा कौआ',img:'images/hindi_story_7.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',
+   text:'गर्मी के दिन एक कौआ पानी की तलाश में उड़ रहा था। उसे एक घड़ा मिला जिसमें थोड़ा पानी था।\n\nकौए की चोंच पानी तक नहीं पहुँच रही थी। उसने एक उपाय सोचा।\n\nउसने एक-एक पत्थर घड़े में डाले। पानी ऊपर आ गया और कौए ने पानी पिया।\n\nनैतिक: जहाँ चाह वहाँ राह।'},
+  {title:'चालाक लोमड़ी',img:'images/hindi_story_8.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',
+   text:'एक लोमड़ी को बहुत भूख लगी थी। उसने एक पेड़ पर कौए को रोटी लेकर बैठे देखा।\n\nलोमड़ी ने कहा — कौए भाई! आपकी आवाज बहुत मीठी है, जरा गाकर सुनाइए।\n\nकौए ने जैसे ही मुँह खोला, रोटी नीचे गिर गई। लोमड़ी ने रोटी उठाई और चली गई।\n\nनैतिक: झूठी तारीफ से बचो।'},
+  {title:'राजा और गरीब किसान',img:'images/hindi_story_9.webp',bg:'linear-gradient(145deg,#1a0a2d,#2d1545)',ac:'#9C27B0',
+   text:'एक न्यायप्रिय राजा ने वेश बदलकर अपने राज्य का दौरा किया।\n\nउसने देखा कि एक बूढ़ा किसान पेड़ लगा रहा है। राजा ने पूछा — इस उम्र में पेड़ क्यों लगा रहे हो? किसान ने कहा — मैंने दूसरों के लगाए पेड़ों के फल खाए हैं, अब दूसरों के लिए लगाता हूँ।\n\nराजा बहुत प्रसन्न हुआ और किसान को पुरस्कृत किया।\n\nनैतिक: दूसरों के लिए जीना ही सच्ची महानता है।'},
+  {title:'ईमानदार लकड़हारा',img:'images/hindi_story_10.webp',bg:'linear-gradient(145deg,#0a1628,#162840)',ac:'#2196F3',
+   text:'एक लकड़हारे की कुल्हाड़ी नदी में गिर गई। वह रोने लगा।\n\nदेवी प्रकट हुई और सोने की कुल्हाड़ी लेकर आई — क्या यह तुम्हारी है? लकड़हारे ने कहा — नहीं।\n\nचाँदी की कुल्हाड़ी लाई — नहीं। फिर उसकी लोहे की कुल्हाड़ी लाई — यह मेरी है!\n\nदेवी ने उसकी ईमानदारी से प्रसन्न होकर तीनों कुल्हाड़ियाँ दे दीं।\n\nनैतिक: ईमानदारी सबसे बड़ा गुण है।'},
+  {title:'दो बैल',img:'images/hindi_story_11.webp',bg:'linear-gradient(145deg,#0f2318,#0a1a10)',ac:'#4CAF50',
+   text:'एक किसान के दो बैल थे। एक मेहनती था, दूसरा आलसी।\n\nआलसी बैल हमेशा बीमार होने का नाटक करता था। मेहनती बैल अकेले सारा काम करता।\n\nएक दिन किसान ने आलसी बैल को बेच दिया। मेहनती बैल को इनाम मिला।\n\nनैतिक: मेहनत का फल मीठा होता है।'},
+  {title:'गुलाब और कैक्टस',img:'images/hindi_story_12.webp',bg:'linear-gradient(145deg,#1a0a0a,#2d1515)',ac:'#E91E63',
+   text:'एक बगीचे में गुलाब और कैक्टस पास-पास उगते थे। गुलाब हमेशा कैक्टस को चिढ़ाता।\n\nएक बार बहुत गर्मी पड़ी। गुलाब मुरझाने लगा। तब कैक्टस ने उसे पानी दिया।\n\nगुलाब को अपनी गलती का एहसास हुआ। उसने कैक्टस से माफी माँगी।\n\nनैतिक: दूसरों की बुराई मत करो, हर किसी में कोई न कोई अच्छाई होती है।'},
+  {title:'परोपकारी राजकुमार',img:'images/hindi_story_13.webp',bg:'linear-gradient(145deg,#1a1200,#281e00)',ac:'#FFC107',
+   text:'एक राजकुमार बहुत दयालु था। उसने एक घायल पक्षी को बचाया और उसकी सेवा की।\n\nजब पक्षी ठीक हुआ तो वह उड़ गया। कुछ दिन बाद पक्षी एक जादुई बीज लेकर आया।\n\nराजकुमार ने वह बीज बोया। उसमें से एक सोने का पेड़ उगा जिससे पूरे राज्य की गरीबी दूर हुई।\n\nनैतिक: दूसरों की मदद करने से अच्छाई लौटकर आती है।'},
+  {title:'बुद्धिमान बंदर',img:'images/hindi_story_14.webp',bg:'linear-gradient(145deg,#0a1f1f,#062020)',ac:'#00BCD4',
+   text:'एक बंदर और एक मगरमच्छ मित्र थे। मगरमच्छ की पत्नी बंदर का दिल खाना चाहती थी।\n\nमगरमच्छ ने बंदर को नदी पार कराने का बहाना बनाया। बीच नदी में उसने सच बताया।\n\nबंदर ने कहा — अरे! मेरा दिल तो पेड़ पर छूट गया! वापस चलो।\n\nमगरमच्छ वापस किनारे पर आया और बंदर कूदकर भाग गया।\n\nनैतिक: बुद्धि से हर मुसीबत का हल निकाला जा सकता है।'},
+];
+
+let hiIdx=0, hiPlaying=false;
+
+function hiRender(dir){
+  const d=HI_ALPHA[hiIdx];
+  const card=document.getElementById('hi-card');
+  card.querySelector('img').src=d.img;
+  card.querySelector('img').alt=d.word;
+  document.getElementById('hi-letter').textContent=d.letter;
+  document.getElementById('hi-letter').style.color=d.color;
+  document.getElementById('hi-word').textContent=d.word;
+  document.getElementById('hi-hindi').textContent=d.hindi;
+  document.getElementById('hi-phrase').textContent=d.phrase;
+  document.getElementById('hi-counter').textContent=(hiIdx+1)+' / '+HI_ALPHA.length;
+  const cls=dir>0?'slide-r':'slide-l';
+  card.classList.remove('slide-r','slide-l'); void card.offsetWidth; card.classList.add(cls);
+  setTimeout(()=>card.classList.remove(cls),300);
+  Speech.stop(); hiPlaying=false;
+  const pb=document.getElementById('hi-play');
+  pb.textContent='▶'; pb.classList.remove('playing');
+}
+function hiNext(){hiIdx=(hiIdx+1)%HI_ALPHA.length;hiRender(1);Rewards.addStars(1);}
+function hiPrev(){hiIdx=(hiIdx-1+HI_ALPHA.length)%HI_ALPHA.length;hiRender(-1);Rewards.addStars(1);}
+function hiPlayFn(){
+  const d=HI_ALPHA[hiIdx];
+  const pb=document.getElementById('hi-play');
+  if(hiPlaying){Speech.stop();hiPlaying=false;pb.textContent='▶';pb.classList.remove('playing');}
+  else{hiPlaying=true;pb.textContent='⏸';pb.classList.add('playing');
+    Speech.speak(d.phrase,'hi-IN',0.9,()=>{hiPlaying=false;pb.textContent='▶';pb.classList.remove('playing');});
+    Rewards.addStars(1);}
+}
+
+function buildHiGrid(){
+  const el=document.getElementById('hi-grid');
+  if(el.children.length) return;
+  HI_ALPHA.forEach(a=>{
+    const item=document.createElement('div');item.className='grid-item';
+    item.innerHTML=`<img src="${a.img}" alt="${a.word}" onerror="this.style.display='none'"><div class="grid-item-label" style="color:${a.color};font-family:'Hind',sans-serif">${a.letter} - ${a.word}</div>`;
+    item.onclick=()=>{Speech.speak(a.phrase,'hi-IN',0.9);Rewards.addStars(1);};
+    el.appendChild(item);
+  });
+}
+
+let hiStoriesBuilt=false;
+function buildHiStories(){
+  if(hiStoriesBuilt) return; hiStoriesBuilt=true;
+  const el=document.getElementById('hi-stories-wrap');
+  let activeBtn=null;
+  HI_STORIES.forEach(s=>{
+    const card=document.createElement('div');card.className='s-card';card.style.background=s.bg;
+    const tid='ht_'+Math.random().toString(36).slice(2,8);
+    card.innerHTML=`
+      <img src="${s.img}" alt="${s.title}" onerror="this.style.height='3px'">
+      <div class="s-body">
+        <div class="s-badge" style="font-family:'Hind',sans-serif">📖 हिंदी कहानी</div>
+        <div class="s-title" style="font-family:'Hind',sans-serif">${s.title}</div>
+        <div class="s-text" id="${tid}" style="font-family:'Hind',sans-serif"></div>
+        <button class="s-btn" style="background:linear-gradient(135deg,${s.ac},${s.ac}99);font-family:'Hind',sans-serif"
+          data-text="${s.text.replace(/"/g,'&quot;')}" onclick="toggleHiStory(this)">🔊 सुनें</button>
+      </div>`;
+    el.appendChild(card);
+    buildWords(s.text,'hi-IN',document.getElementById(tid));
+  });
+}
+
+let hiActiveBtn=null;
+function toggleHiStory(btn){
+  const text=btn.dataset.text;
+  if(hiActiveBtn&&hiActiveBtn!==btn){hiActiveBtn.textContent='🔊 सुनें';hiActiveBtn.classList.remove('playing');Speech.stop();}
+  if(Speech.isSpeaking()&&hiActiveBtn===btn){Speech.stop();btn.textContent='🔊 सुनें';btn.classList.remove('playing');hiActiveBtn=null;}
+  else{hiActiveBtn=btn;btn.textContent='⏸ रोकें';btn.classList.add('playing');
+    Speech.speak(text,'hi-IN',0.9,()=>{btn.textContent='🔊 सुनें';btn.classList.remove('playing');if(hiActiveBtn===btn)hiActiveBtn=null;});
+    Rewards.addStars(3);}
+}
+
+const HINDI_ABHYAS_ITEMS = [
+  {
+    title: 'स्वर',
+    sub: 'स्वरों की पहचान (13 स्वर)',
+    content: 'अ  आ  इ  ई  उ  ऊ  ऋ  ए  ऐ  ओ  औ  अं  अः',
+    color: '#E53935',
+    speechText: 'अ, आ, इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः'
+  },
+  {
+    title: 'व्यंजन',
+    sub: 'व्यंजनों की पहचान (33 व्यंजन)',
+    content: 'क  ख  ग  घ  ङ\nच  छ  ज  झ  ञ\nट  ठ  ड  ढ  ण\nत  थ  द  ध  न\nप  फ  ब  भ  म\nय  र  ल  व\nश  ष  स  ह',
+    color: '#1E88E5',
+    speechText: 'क, ख, ग, घ, ङ, च, छ, ज, झ, ञ, ट, ठ, ड, ढ, ण, त, थ, द, ध, न, प, फ, ब, भ, म, य, र, ल, व, श, ष, स, ह'
+  },
+  {
+    title: 'मात्राओं की पहचान',
+    sub: 'स्वर और उनकी मात्राएँ',
+    content: 'अ ➔ कोई मात्रा नहीं\nआ ➔  ा\nइ ➔  ि\nई ➔  ी\nउ ➔  ु\nऊ ➔  ू\nऋ ➔  ृ\nए ➔  े\nऐ ➔  ै\nओ ➔  ो\nऔ ➔  ौ\nअं ➔  ं\nअः ➔  ः',
+    color: '#43A047',
+    speechText: 'अ, कोई मात्रा नहीं. आ की मात्रा, इ की मात्रा, ई की मात्रा, उ की मात्रा, ऊ की मात्रा, ऋ की मात्रा, ए की मात्रा, ऐ की मात्रा, ओ की मात्रा, औ की मात्रा, अं की मात्रा, अः की मात्रा'
+  },
+  {
+    title: 'संयुक्त व्यंजन',
+    sub: 'विशेष संयुक्त अक्षर',
+    content: 'क्ष  त्र  ज्ञ  श्र',
+    color: '#8E24AA',
+    speechText: 'क्ष, त्र, ज्ञ, श्र'
+  }
+];
+
+let curAbhyasPlaying = -1;
+
+function buildAbhyas(){
+  const el = document.getElementById('abhyas-wrap');
+  if(el.children.length) return;
+  HINDI_ABHYAS_ITEMS.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.id = 'abhyas_card_' + idx;
+    card.style.cssText = `
+      background:#fff;border-radius:24px;padding:22px;margin-bottom:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.07);border:2px solid ${item.color}33;
+      transition:transform 0.2s, background 0.2s;
+    `;
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div>
+          <span style="background:${item.color}18;color:${item.color};font-weight:900;padding:4px 12px;border-radius:12px;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px">${item.title}</span>
+          <div style="font-size:1.15rem;font-weight:900;color:#1e293b;margin-top:6px;font-family:'Hind',sans-serif">${item.sub}</div>
+        </div>
+        <button id="abhyas_btn_${idx}" style="
+          width:48px;height:48px;border-radius:50%;background:${item.color};color:#fff;
+          font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+          box-shadow:0 4px 12px ${item.color}66;cursor:pointer;border:none;flex-shrink:0
+        ">▶</button>
+      </div>
+      <div style="
+        background:#F8FAFC;border-radius:16px;padding:16px;font-size:1.35rem;font-weight:800;
+        color:#0f172a;line-height:2;white-space:pre-line;text-align:center;font-family:'Hind',sans-serif;
+        letter-spacing:2px;border:1px solid #E2E8F0
+      ">${item.content}</div>
+    `;
+
+    const playFn = () => {
+      const btn = document.getElementById('abhyas_btn_' + idx);
+      if(curAbhyasPlaying === idx){
+        Speech.stop();
+        curAbhyasPlaying = -1;
+        btn.textContent = '▶';
+        card.style.background = '#fff';
+      } else {
+        if(curAbhyasPlaying >= 0){
+          const prevBtn = document.getElementById('abhyas_btn_' + curAbhyasPlaying);
+          const prevCard = document.getElementById('abhyas_card_' + curAbhyasPlaying);
+          if(prevBtn) prevBtn.textContent = '▶';
+          if(prevCard) prevCard.style.background = '#fff';
+        }
+        Speech.stop();
+        curAbhyasPlaying = idx;
+        btn.textContent = '⏹';
+        card.style.background = item.color + '10';
+        Speech.speak(item.speechText, 'hi-IN', 0.85, () => {
+          btn.textContent = '▶';
+          card.style.background = '#fff';
+          if(curAbhyasPlaying === idx) curAbhyasPlaying = -1;
+        });
+        if(typeof Rewards !== 'undefined') Rewards.addStars(1);
+      }
+    };
+
+    card.onclick = playFn;
+    card.querySelector('#abhyas_btn_' + idx).onclick = (e) => { e.stopPropagation(); playFn(); };
+    el.appendChild(card);
+  });
+}
+
+hiRender(1);
+const hiCard=document.getElementById('hi-card');
+let hsx=0;
+hiCard.addEventListener('touchstart',e=>{hsx=e.touches[0].clientX;},{passive:true});
+hiCard.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-hsx;if(Math.abs(dx)>40){if(dx<0)hiNext();else hiPrev();}},{passive:true});
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('pane-akshar').classList.contains('active')){
+    if(e.key==='ArrowRight') hiNext();
+    if(e.key==='ArrowLeft') hiPrev();
+  }
+});
+</script>
+</body>
+</html>
